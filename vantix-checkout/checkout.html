@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Đăng Ký Gói Lifetime – VANTIX SNR MASTER</title>
+<title>Đăng Ký – VANTIX SNR MASTER</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --gold:#D4A017;--gold-light:#F5C842;--green:#27C76A;--green-glow:#6EE7A0;
   --dark:#0D1F3C;--dark2:#071428;--text:#E8F0FF;--muted:#8AA0C8;
-  --soft:rgba(232,240,255,0.65);--white:#fff;
+  --soft:rgba(232,240,255,0.65);
   --card-bg:rgba(255,255,255,0.04);--card-border:rgba(70,130,200,0.22);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -69,12 +69,13 @@ input::placeholder{color:var(--muted);}
 
 .hidden{display:none!important;}
 
+.whop-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:12px;}
+
 /* ACTIVATION STEPS */
 .act-header{text-align:center;margin-bottom:28px;}
 .act-icon{font-size:3.5rem;margin-bottom:12px;}
 .act-title-main{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin-bottom:8px;}
 .act-subtitle{color:var(--soft);font-size:.9rem;line-height:1.6;}
-
 .act-steps{display:flex;flex-direction:column;gap:20px;}
 .act-step{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:16px;padding:20px;}
 .act-num{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0D1F3C;font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;}
@@ -83,14 +84,12 @@ input::placeholder{color:var(--muted);}
 .act-step-desc{color:var(--soft);font-size:.85rem;line-height:1.6;margin-bottom:12px;}
 .act-link{display:inline-block;padding:10px 20px;border-radius:10px;font-weight:800;font-size:.88rem;text-decoration:none;transition:.2s;}
 .act-link-whop{background:linear-gradient(135deg,#5B21B6,#7C3AED);color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.4);}
-.act-link-whop:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,.5);}
+.act-link-whop:hover{transform:translateY(-1px);}
 .act-link-zalo{background:linear-gradient(135deg,#0068FF,#00A3FF);color:#fff;box-shadow:0 4px 14px rgba(0,104,255,.4);}
-.act-link-zalo:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,104,255,.5);}
-
+.act-link-zalo:hover{transform:translateY(-1px);}
 .zalo-qr{text-align:center;margin-top:14px;}
 .zalo-qr img{width:140px;height:140px;border-radius:10px;border:2px solid rgba(0,104,255,.4);}
 .zalo-qr-cap{color:var(--muted);font-size:.73rem;margin-top:6px;}
-
 .act-note{text-align:center;margin-top:24px;padding:14px;background:rgba(39,199,106,.07);border:1px solid rgba(39,199,106,.2);border-radius:12px;color:var(--green-glow);font-size:.85rem;line-height:1.6;}
 
 @media(max-width:480px){.card{padding:24px 18px;}.bank-value{font-size:.85rem;}.act-step{padding:16px;}}
@@ -99,26 +98,25 @@ input::placeholder{color:var(--muted);}
 <body>
 <div class="wrap">
 
-  <!-- TOP BAR -->
   <div class="top-bar">
     <span class="brand">VANTIX SNR MASTER</span>
     <a href="/" class="back-link">← Xem lại bảng giá</a>
   </div>
 
-  <!-- STEP INDICATOR -->
-  <div class="steps">
+  <!-- STEP BAR (chỉ hiện cho lifetime) -->
+  <div class="steps hidden" id="stepBar">
     <div class="step active" id="stepA">① Thông tin</div>
     <div class="step" id="stepB">② Chuyển khoản</div>
     <div class="step" id="stepC">③ Kích hoạt</div>
   </div>
 
-  <!-- STEP 1: INFO FORM -->
+  <!-- FORM THÔNG TIN (dùng cho cả 3 plan) -->
   <div id="panelInfo" class="card">
-    <div class="card-title">Gói Lifetime 👑</div>
-    <div class="card-sub">Truy cập vĩnh viễn – thanh toán 1 lần duy nhất</div>
+    <div class="card-title" id="infoTitle">Đăng Ký</div>
+    <div class="card-sub" id="infoSub"></div>
 
-    <div class="plan-amount">9.160.000đ</div>
-    <div class="plan-period">thanh toán 1 lần, dùng mãi mãi</div>
+    <div class="plan-amount" id="infoAmount"></div>
+    <div class="plan-period" id="infoPeriod"></div>
 
     <div class="form-group">
       <label>Họ và tên *</label>
@@ -133,12 +131,13 @@ input::placeholder{color:var(--muted);}
       <input type="tel" id="inputPhone" placeholder="0912 345 678" autocomplete="tel" />
     </div>
 
-    <button class="btn-primary" id="btnContinue" onclick="submitOrder()">
-      Tiếp Tục → Xem Thông Tin Chuyển Khoản
+    <button class="btn-primary" id="btnContinue" onclick="submitForm()">
+      Tiếp Tục →
     </button>
+    <p class="whop-note hidden" id="whopNote">Bạn sẽ được chuyển sang trang Whop để hoàn tất thanh toán</p>
   </div>
 
-  <!-- STEP 2: PAYMENT INFO -->
+  <!-- STEP 2: THANH TOÁN (chỉ lifetime) -->
   <div id="panelPayment" class="card hidden">
     <div class="card-title">Chuyển khoản ngân hàng</div>
     <div class="card-sub">Quét QR hoặc chuyển khoản thủ công</div>
@@ -186,66 +185,72 @@ input::placeholder{color:var(--muted);}
     </button>
   </div>
 
-  <!-- STEP 3: ACTIVATION GUIDE -->
+  <!-- STEP 3: KÍCH HOẠT (chỉ lifetime) -->
   <div id="panelActivation" class="card hidden">
-
     <div class="act-header">
       <div class="act-icon">🎉</div>
       <div class="act-title-main">Cảm ơn bạn đã đăng ký!</div>
-      <div class="act-subtitle">Thực hiện <strong>3 bước đơn giản</strong> dưới đây để kích hoạt quyền truy cập của bạn.</div>
+      <div class="act-subtitle">Thực hiện <strong>3 bước đơn giản</strong> dưới đây để kích hoạt quyền truy cập.</div>
     </div>
 
     <div class="act-steps">
-
-      <!-- Bước 1 -->
       <div class="act-step">
         <div class="act-num">1</div>
         <div class="act-content">
           <div class="act-step-title">Tạo tài khoản Whop miễn phí</div>
           <div class="act-step-desc">Đây là nền tảng để bạn truy cập khóa học và cộng đồng Discord VIP.</div>
-          <a href="https://whop.com/discord-1929/hanh-d-ng-gia-free?a=testboss8e" target="_blank" class="act-link act-link-whop">
-            → Tạo Tài Khoản Whop Ngay
-          </a>
+          <a href="https://whop.com/discord-1929/hanh-d-ng-gia-free?a=testboss8e" target="_blank" class="act-link act-link-whop">→ Tạo Tài Khoản Whop Ngay</a>
         </div>
       </div>
-
-      <!-- Bước 2 -->
       <div class="act-step">
         <div class="act-num">2</div>
         <div class="act-content">
           <div class="act-step-title">Chụp màn hình xác nhận chuyển khoản</div>
-          <div class="act-step-desc">Mở app ngân hàng → vào lịch sử giao dịch → chụp ảnh màn hình cho thấy đã chuyển khoản thành công (có mã nội dung <strong id="refInGuide" style="color:var(--gold-light)"></strong>).</div>
+          <div class="act-step-desc">Mở app ngân hàng → vào lịch sử giao dịch → chụp ảnh màn hình cho thấy đã chuyển thành công (có mã nội dung <strong id="refInGuide" style="color:var(--gold-light)"></strong>).</div>
         </div>
       </div>
-
-      <!-- Bước 3 -->
       <div class="act-step">
         <div class="act-num">3</div>
         <div class="act-content">
           <div class="act-step-title">Gửi thông tin qua Zalo để kích hoạt</div>
-          <div class="act-step-desc">Gửi cho chúng tôi: <strong>Tên + Email + ảnh chuyển khoản</strong>. Chúng tôi sẽ kích hoạt trong vòng <strong style="color:var(--green-glow);">24 giờ</strong>.</div>
-          <a href="https://zalo.me/0847265886" target="_blank" class="act-link act-link-zalo">
-            📱 Nhắn Zalo Ngay
-          </a>
+          <div class="act-step-desc">Gửi: <strong>Tên + Email + ảnh chuyển khoản</strong>. Chúng tôi kích hoạt trong vòng <strong style="color:var(--green-glow);">24 giờ</strong>.</div>
+          <a href="https://zalo.me/0847265886" target="_blank" class="act-link act-link-zalo">📱 Nhắn Zalo Ngay</a>
           <div class="zalo-qr">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://zalo.me/0847265886&bgcolor=071428&color=E8F0FF&margin=10" alt="Zalo QR" />
             <div class="zalo-qr-cap">Hoặc quét QR bằng ứng dụng Zalo</div>
           </div>
         </div>
       </div>
-
     </div>
 
     <div class="act-note">
-      ✅ Sau khi nhận được thông tin, chúng tôi sẽ kích hoạt tài khoản Whop của bạn và bạn sẽ có ngay quyền truy cập vào <strong>Discord VIP</strong> và toàn bộ <strong>khóa học</strong>.
+      ✅ Sau khi nhận được thông tin, chúng tôi sẽ kích hoạt tài khoản Whop của bạn — bạn có ngay quyền truy cập <strong>Discord VIP</strong> và toàn bộ <strong>khóa học</strong>.
     </div>
-
   </div>
 
 </div>
 
 <script>
-async function submitOrder() {
+const PLANS = {
+  month:    { title: 'Gói Tháng 📱',    amount: '$19.99', period: 'mỗi tháng — thanh toán qua Whop',       whopUrl: 'https://whop.com/checkout/plan_3al2H4nQ4FUyE' },
+  year:     { title: 'Gói Năm ⚡',      amount: '$239.88', period: 'mỗi năm — thanh toán qua Whop',        whopUrl: 'https://whop.com/checkout/plan_GBEJNvqXCKjj6' },
+  lifetime: { title: 'Gói Lifetime 👑', amount: '9.160.000đ', period: 'thanh toán 1 lần, dùng mãi mãi',   whopUrl: null },
+};
+
+const params = new URLSearchParams(window.location.search);
+const plan = params.get('plan') || 'lifetime';
+const p = PLANS[plan] || PLANS.lifetime;
+const isLifetime = plan === 'lifetime';
+
+document.getElementById('infoTitle').textContent = p.title;
+document.getElementById('infoSub').textContent   = isLifetime ? 'Truy cập vĩnh viễn – thanh toán 1 lần duy nhất' : 'Nhập thông tin để chuyển thẳng sang trang thanh toán Whop';
+document.getElementById('infoAmount').textContent = p.amount;
+document.getElementById('infoPeriod').textContent = p.period;
+document.getElementById('btnContinue').textContent = isLifetime ? 'Tiếp Tục → Xem Thông Tin Chuyển Khoản' : 'Tiếp Tục → Thanh Toán Trên Whop';
+if (!isLifetime) document.getElementById('whopNote').classList.remove('hidden');
+if (isLifetime)  document.getElementById('stepBar').classList.remove('hidden');
+
+async function submitForm() {
   const name  = document.getElementById('inputName').value.trim();
   const email = document.getElementById('inputEmail').value.trim();
   const phone = document.getElementById('inputPhone').value.trim();
@@ -255,15 +260,20 @@ async function submitOrder() {
 
   const btn = document.getElementById('btnContinue');
   btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner"></span>Đang tạo đơn hàng...';
+  btn.innerHTML = '<span class="loading-spinner"></span>Đang xử lý...';
+
+  fetch('/.netlify/functions/save-customer', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, phone, plan }),
+  }).catch(() => {});
+
+  if (!isLifetime) {
+    window.location.href = p.whopUrl + '?prefill_email=' + encodeURIComponent(email);
+    return;
+  }
 
   try {
-    fetch('/.netlify/functions/save-customer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, plan: 'lifetime' }),
-    }).catch(() => {});
-
     const res = await fetch('/.netlify/functions/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -291,7 +301,6 @@ function showPaymentPanel(data) {
   document.getElementById('bankOwner').textContent = data.account_name;
   document.getElementById('refCode').textContent   = data.ref_code;
   document.getElementById('refWarn').textContent   = data.ref_code;
-
   window._refCode = data.ref_code;
 }
 
@@ -300,10 +309,7 @@ function showActivation() {
   document.getElementById('panelActivation').classList.remove('hidden');
   document.getElementById('stepB').className = 'step done';
   document.getElementById('stepC').className = 'step active';
-
-  if (window._refCode) {
-    document.getElementById('refInGuide').textContent = window._refCode;
-  }
+  if (window._refCode) document.getElementById('refInGuide').textContent = window._refCode;
 }
 
 function copyText(elId) {
