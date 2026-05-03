@@ -1,8 +1,4 @@
 {
   "name": "vantix-checkout",
-  "version": "1.0.0",
-  "description": "Hệ thống thanh toán tự động ngân hàng Việt Nam cho VANTIX SNR MASTER",
-  "dependencies": {
-    "@netlify/blobs": "^8.1.0"
-  }
+  "version": "1.0.0"
 }
