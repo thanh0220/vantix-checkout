@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanh Toán – VANTIX SNR MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#D4A017;--gold-light:#F5C842;--green:#27C76A;--green-glow:#6EE7A0;
+  --dark:#0D1F3C;--dark2:#071428;--text:#E8F0FF;--muted:#8AA0C8;
+  --soft:rgba(232,240,255,0.65);--white:#fff;
+  --card-bg:rgba(255,255,255,0.04);--card-border:rgba(70,130,200,0.22);
+  --accent:#FF5722;--accent2:#FF6B2B;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--dark2);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px 80px;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 15% 10%,rgba(70,130,200,0.12) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 80%,rgba(212,160,23,0.07) 0%,transparent 55%);}
+
+.wrap{width:100%;max-width:520px;position:relative;z-index:1;}
+
+/* LOGO / BACK */
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
+.brand{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--gold-light);}
+.back-link{color:var(--muted);font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.back-link:hover{color:var(--text);}
+
+/* STEP INDICATOR */
+.steps{display:flex;gap:0;margin-bottom:32px;border-radius:12px;overflow:hidden;border:1px solid var(--card-border);}
+.step{flex:1;padding:12px 8px;text-align:center;font-size:.78rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:var(--card-bg);transition:.2s;}
+.step.active{background:rgba(212,160,23,.15);color:var(--gold-light);border-bottom:2px solid var(--gold);}
+.step.done{background:rgba(39,199,106,.08);color:var(--green-glow);}
+
+/* CARD */
+.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:20px;padding:32px 28px;margin-bottom:20px;}
+.card-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:6px;}
+.card-sub{color:var(--soft);font-size:.9rem;margin-bottom:24px;}
+
+/* PLAN BADGE */
+.plan-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.4);color:var(--gold-light);padding:8px 16px;border-radius:10px;font-weight:800;font-size:.9rem;margin-bottom:20px;}
+.plan-amount{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold-light);margin-bottom:4px;}
+.plan-period{color:var(--muted);font-size:.85rem;margin-bottom:24px;}
+
+/* FORM */
+.form-group{margin-bottom:16px;}
+label{display:block;font-size:.82rem;font-weight:700;color:var(--soft);margin-bottom:7px;letter-spacing:.3px;}
+input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--card-border);border-radius:10px;padding:13px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.95rem;outline:none;transition:.2s;}
+input:focus{border-color:rgba(212,160,23,.6);background:rgba(255,255,255,.08);}
+input::placeholder{color:var(--muted);}
+
+/* BUTTONS */
+.btn-primary{width:100%;background:linear-gradient(135deg,#1A8C4E,#27C76A);color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:.5px;padding:15px;border-radius:14px;border:none;font-size:1rem;cursor:pointer;box-shadow:0 8px 22px rgba(39,199,106,.35);transition:.2s;font-family:'Nunito',sans-serif;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(39,199,106,.5);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* BANK INFO */
+.bank-box{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.25);border-radius:16px;padding:20px;margin-bottom:20px;}
+.bank-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.bank-row:last-child{border-bottom:none;}
+.bank-label{color:var(--muted);font-size:.83rem;}
+.bank-value{font-weight:800;color:var(--text);font-size:.95rem;display:flex;align-items:center;gap:8px;}
+.copy-btn{background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.35);color:var(--gold-light);padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s;}
+.copy-btn:hover{background:rgba(212,160,23,.25);}
+.ref-highlight{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold-light);letter-spacing:1px;}
+
+/* QR */
+.qr-wrap{text-align:center;margin-bottom:20px;}
+.qr-wrap img{width:200px;height:200px;border-radius:12px;border:3px solid rgba(212,160,23,.3);display:inline-block;}
+.qr-caption{color:var(--muted);font-size:.78rem;margin-top:8px;}
+
+/* STATUS */
+.status-box{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;margin-bottom:20px;background:rgba(255,255,255,.03);border:1px solid var(--card-border);}
+.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.status-dot.waiting{background:#F5C842;box-shadow:0 0 8px #F5C84280;animation:pulse 1.5s infinite;}
+.status-dot.paid{background:var(--green);box-shadow:0 0 8px rgba(39,199,106,.6);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-text{font-size:.88rem;color:var(--soft);}
+
+/* WARNING */
+.warning-box{background:rgba(255,87,34,.08);border:1px solid rgba(255,87,34,.3);border-radius:12px;padding:14px 18px;font-size:.83rem;color:#FFA07A;line-height:1.6;}
+.warning-box strong{color:#FF6B2B;}
+
+/* SUCCESS */
+.success-card{text-align:center;padding:40px 28px;}
+.success-icon{font-size:4rem;margin-bottom:16px;}
+.success-title{font-family:'Playfair Display',serif;font-size:1.8rem;color:#fff;margin-bottom:10px;}
+.success-sub{color:var(--soft);margin-bottom:28px;line-height:1.7;}
+.access-btn{display:inline-block;background:linear-gradient(135deg,#D4A017,#F5C842);color:#0D1F3C;font-weight:900;text-transform:uppercase;letter-spacing:.5px;padding:15px 32px;border-radius:14px;text-decoration:none;font-size:1rem;box-shadow:0 8px 22px rgba(212,160,23,.4);}
+
+/* LOADING */
+.loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HIDDEN */
+.hidden{display:none!important;}
+
+/* TIMER */
+.timer-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.timer-label{color:var(--muted);font-size:.82rem;}
+.timer-val{font-weight:800;color:var(--gold-light);font-size:.9rem;}
+
+@media(max-width:480px){.card{padding:24px 18px;}.bank-value{font-size:.85rem;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <span class="brand">VANTIX SNR MASTER</span>
+    <a href="/" class="back-link">← Xem lại bảng giá</a>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps" id="stepBar">
+    <div class="step active" id="step1">① Thông tin</div>
+    <div class="step" id="step2">② Thanh toán</div>
+    <div class="step" id="step3">③ Hoàn tất</div>
+  </div>
+
+  <!-- STEP 1: INFO FORM -->
+  <div id="panelInfo" class="card">
+    <div class="card-title">Thông tin đăng ký</div>
+    <div class="card-sub">Nhập email để nhận link truy cập sau khi thanh toán</div>
+
+    <div id="planBadge" class="plan-badge">⚡ Đang tải...</div>
+    <div id="planAmount" class="plan-amount"></div>
+    <div id="planPeriod" class="plan-period"></div>
+
+    <div class="form-group">
+      <label>Họ và tên *</label>
+      <input type="text" id="inputName" placeholder="Nguyễn Văn A" autocomplete="name" />
+    </div>
+    <div class="form-group">
+      <label>Email *</label>
+      <input type="email" id="inputEmail" placeholder="email@example.com" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label>Số điện thoại (để hỗ trợ nhanh hơn)</label>
+      <input type="tel" id="inputPhone" placeholder="0912 345 678" autocomplete="tel" />
+    </div>
+
+    <button class="btn-primary" id="btnContinue" onclick="submitOrder()">
+      Tiếp Tục → Xem QR Thanh Toán
+    </button>
+  </div>
+
+  <!-- STEP 2: PAYMENT -->
+  <div id="panelPayment" class="card hidden">
+    <div class="card-title">Chuyển khoản ngân hàng</div>
+    <div class="card-sub">Quét QR hoặc chuyển khoản thủ công — hệ thống tự động xác nhận</div>
+
+    <!-- QR CODE -->
+    <div class="qr-wrap">
+      <img id="qrImage" src="" alt="QR Code thanh toán" />
+      <div class="qr-caption">Quét bằng app ngân hàng bất kỳ (VietQR)</div>
+    </div>
+
+    <!-- BANK DETAILS -->
+    <div class="bank-box">
+      <div class="bank-row">
+        <span class="bank-label">Ngân hàng</span>
+        <span class="bank-value" id="bankName">–</span>
+      </div>
+      <div class="bank-row">
+        <span class="bank-label">Số tài khoản</span>
+        <span class="bank-value">
+          <span id="bankAcc">–</span>
+          <button class="copy-btn" onclick="copyText('bankAcc')">Copy</button>
+        </span>
+      </div>
+      <div class="bank-row">
+        <span class="bank-label">Chủ tài khoản</span>
+        <span class="bank-value" id="bankOwner">–</span>
+      </div>
+      <div class="bank-row">
+        <span class="bank-label">Số tiền</span>
+        <span class="bank-value" id="bankAmount" style="color:var(--gold-light)">–</span>
+      </div>
+      <div class="bank-row">
+        <span class="bank-label">Nội dung CK ⚠️</span>
+        <span class="bank-value">
+          <span class="ref-highlight" id="refCode">–</span>
+          <button class="copy-btn" onclick="copyText('refCode')">Copy</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- WARNING -->
+    <div class="warning-box" style="margin-bottom:16px;">
+      ⚠️ <strong>Quan trọng:</strong> Nhập đúng nội dung chuyển khoản <strong id="refCodeWarn"></strong> — hệ thống dùng mã này để xác nhận và cấp quyền tự động.
+    </div>
+
+    <!-- TIMER -->
+    <div class="timer-row">
+      <span class="timer-label">⏱ Đơn hàng hết hạn sau:</span>
+      <span class="timer-val" id="timerDisplay">29:59</span>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-box">
+      <div class="status-dot waiting" id="statusDot"></div>
+      <div class="status-text" id="statusText">Đang chờ chuyển khoản của bạn...</div>
+    </div>
+
+    <button class="btn-primary" id="btnDoneTransfer" onclick="manualCheck()" style="background:linear-gradient(135deg,#1e3a6e,#2a5298);">
+      Tôi Đã Chuyển Khoản – Kiểm Tra Ngay
+    </button>
+  </div>
+
+  <!-- STEP 3: SUCCESS (inline) -->
+  <div id="panelSuccess" class="card hidden">
+    <div class="success-card">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Thanh toán thành công!</div>
+      <div class="success-sub">
+        Cảm ơn bạn đã đăng ký <strong id="successPlan" style="color:var(--gold-light)"></strong>.<br>
+        Link truy cập đã được gửi đến <strong id="successEmail" style="color:var(--gold-light)"></strong>.<br><br>
+        Nếu không thấy email, hãy kiểm tra thư mục <em>Spam</em>.
+      </div>
+      <a href="#" id="accessLink" class="access-btn" target="_blank">
+        🚀 Kích Hoạt Ngay →
+      </a>
+      <p style="color:var(--muted);font-size:.8rem;margin-top:16px;">Hoặc click vào link trong email vừa gửi</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PLANS = {
+  month:    { label: 'Gói Tháng',    amount: 526836,   period: 'mỗi tháng',      icon: '📱' },
+  year:     { label: 'Gói Năm',      amount: 6322037,  period: 'mỗi năm',        icon: '⚡' },
+  lifetime: { label: 'Gói Lifetime', amount: 9160000,  period: 'thanh toán 1 lần', icon: '👑' },
+};
+
+let currentPlan = 'year';
+let currentRef = null;
+let pollTimer = null;
+let countdownTimer = null;
+let secondsLeft = 30 * 60;
+let pollAttempts = 0;
+const MAX_POLL_ATTEMPTS = 450;
+
+function fmtVND(n) {
+  return n.toLocaleString('vi-VN') + 'đ';
+}
+
+function initPage() {
+  const params = new URLSearchParams(window.location.search);
+  const plan = params.get('plan');
+  if (plan && PLANS[plan]) currentPlan = plan;
+
+  const p = PLANS[currentPlan];
+  document.getElementById('planBadge').textContent = p.icon + ' ' + p.label;
+  document.getElementById('planAmount').textContent = fmtVND(p.amount);
+  document.getElementById('planPeriod').textContent = p.period;
+}
+
+async function submitOrder() {
+  const name  = document.getElementById('inputName').value.trim();
+  const email = document.getElementById('inputEmail').value.trim();
+  const phone = document.getElementById('inputPhone').value.trim();
+
+  if (!name)  { alert('Vui lòng nhập họ tên.'); return; }
+  if (!email || !email.includes('@')) { alert('Vui lòng nhập email hợp lệ.'); return; }
+
+  const btn = document.getElementById('btnContinue');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span>Đang tạo đơn hàng...';
+
+  try {
+    const res = await fetch('/.netlify/functions/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, plan: currentPlan }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Lỗi tạo đơn hàng');
+    showPaymentPanel(data, email);
+  } catch (err) {
+    alert('Lỗi: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = 'Tiếp Tục → Xem QR Thanh Toán';
+  }
+}
+
+function showPaymentPanel(data, email) {
+  currentRef = data.ref_code;
+
+  document.getElementById('panelInfo').classList.add('hidden');
+  document.getElementById('panelPayment').classList.remove('hidden');
+  document.getElementById('step1').className = 'step done';
+  document.getElementById('step2').className = 'step active';
+
+  document.getElementById('qrImage').src = data.qr_url;
+  document.getElementById('bankName').textContent  = data.bank_name;
+  document.getElementById('bankAcc').textContent   = data.account_number;
+  document.getElementById('bankOwner').textContent = data.account_name;
+  document.getElementById('bankAmount').textContent = fmtVND(data.amount);
+  document.getElementById('refCode').textContent    = data.ref_code;
+  document.getElementById('refCodeWarn').textContent = data.ref_code;
+
+  startCountdown();
+  startPolling(email);
+}
+
+function startCountdown() {
+  secondsLeft = 30 * 60;
+  countdownTimer = setInterval(() => {
+    secondsLeft--;
+    const m = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+    const s = String(secondsLeft % 60).padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = m + ':' + s;
+    if (secondsLeft <= 0) {
+      clearInterval(countdownTimer);
+      document.getElementById('timerDisplay').textContent = 'Hết hạn';
+      stopPolling();
+    }
+  }, 1000);
+}
+
+function startPolling(email) {
+  pollAttempts = 0;
+  pollTimer = setInterval(() => checkPayment(email), 4000);
+}
+
+function stopPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+}
+
+async function checkPayment(email) {
+  if (!currentRef) return;
+  if (pollAttempts >= MAX_POLL_ATTEMPTS) { stopPolling(); return; }
+  pollAttempts++;
+  try {
+    const res = await fetch(`/.netlify/functions/check-payment?ref=${currentRef}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.paid) {
+      stopPolling();
+      clearInterval(countdownTimer);
+      showSuccess(email, data.access_url);
+    }
+  } catch (e) {
+    console.error('Payment check failed:', e.message);
+  }
+}
+
+async function manualCheck() {
+  const btn = document.getElementById('btnDoneTransfer');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span>Đang kiểm tra...';
+  try {
+    const res = await fetch(`/.netlify/functions/check-payment?ref=${currentRef}`);
+    const data = await res.json();
+    if (data.paid) {
+      stopPolling();
+      clearInterval(countdownTimer);
+      showSuccess(document.getElementById('inputEmail').value, data.access_url);
+    } else {
+      alert('Chưa nhận được thanh toán. Nếu bạn đã chuyển, vui lòng chờ thêm 1-2 phút.');
+    }
+  } catch (_) {
+    alert('Lỗi kiểm tra. Vui lòng thử lại.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Tôi Đã Chuyển Khoản – Kiểm Tra Ngay';
+  }
+}
+
+function showSuccess(email, accessUrl) {
+  document.getElementById('panelPayment').classList.add('hidden');
+  document.getElementById('panelSuccess').classList.remove('hidden');
+  document.getElementById('step2').className = 'step done';
+  document.getElementById('step3').className = 'step active';
+
+  const planLabel = PLANS[currentPlan]?.label || 'Gói đã chọn';
+  document.getElementById('successPlan').textContent  = planLabel;
+  document.getElementById('successEmail').textContent = email;
+  if (accessUrl) document.getElementById('accessLink').href = accessUrl;
+}
+
+function copyText(elId) {
+  const text = document.getElementById(elId).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector(`[onclick="copyText('${elId}')"]`);
+    const orig = btn.textContent;
+    btn.textContent = 'Đã copy!';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+
+initPage();
+</script>
+</body>
+</html>
