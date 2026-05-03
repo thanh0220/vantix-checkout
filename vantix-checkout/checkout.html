@@ -258,6 +258,12 @@ async function submitOrder() {
   btn.innerHTML = '<span class="loading-spinner"></span>Đang tạo đơn hàng...';
 
   try {
+    fetch('/.netlify/functions/save-customer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, plan: 'lifetime' }),
+    }).catch(() => {});
+
     const res = await fetch('/.netlify/functions/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
