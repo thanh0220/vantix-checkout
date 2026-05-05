@@ -22,7 +22,15 @@ async function saveOrder(ref, order) {
 }
 
 exports.handler = async (event) => {
-  const CORS = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
+  const CORS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+
+  if (event.httpMethod === "OPTIONS")
+    return { statusCode: 204, headers: CORS, body: "" };
 
   if (event.httpMethod !== "POST")
     return { statusCode: 405, headers: CORS, body: JSON.stringify({ error: "Method not allowed" }) };
@@ -41,7 +49,7 @@ exports.handler = async (event) => {
   const acc    = process.env.BANK_ACCOUNT_NUMBER  || "";
   const owner  = process.env.BANK_ACCOUNT_NAME    || "";
 
-  await saveOrder(ref, { ref, email, name, phone, plan, amount, status: "pending", created_at: Date.now() });
+  await saveOrder(ref, { ref, email, name, phone, plan, amount, status: "pending", created_at: Date.now() }).catch(() => {});
 
   const qr = `https://qr.sepay.vn/img?acc=${acc}&bank=${bank}&amount=${amount}&des=${ref}&template=compact&download=false`;
 
