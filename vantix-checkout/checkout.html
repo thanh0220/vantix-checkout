@@ -100,7 +100,7 @@ input::placeholder{color:var(--muted);}
 
   <div class="top-bar">
     <span class="brand">VANTIX SNR MASTER</span>
-    <a href="/" class="back-link">← Xem lại bảng giá</a>
+    <a href="index.html#pricing" class="back-link">← Xem lại bảng giá</a>
   </div>
 
   <!-- STEP BAR (chỉ hiện cho lifetime) -->
@@ -250,7 +250,21 @@ document.getElementById('btnContinue').textContent = isLifetime ? 'Tiếp Tục 
 if (!isLifetime) document.getElementById('whopNote').classList.remove('hidden');
 if (isLifetime)  document.getElementById('stepBar').classList.remove('hidden');
 
-async function submitForm() {
+const BANK = {
+  name:   'BIDV',
+  acc:    '5310986313',
+  owner:  'NGUYEN VAN THANH',
+  amount: 9160000,
+};
+
+function genRef() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = 'VNX';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+function submitForm() {
   const name  = document.getElementById('inputName').value.trim();
   const email = document.getElementById('inputEmail').value.trim();
   const phone = document.getElementById('inputPhone').value.trim();
@@ -273,20 +287,9 @@ async function submitForm() {
     return;
   }
 
-  try {
-    const res = await fetch('/.netlify/functions/create-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, plan: 'lifetime' }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Lỗi tạo đơn hàng');
-    showPaymentPanel(data);
-  } catch (err) {
-    alert('Lỗi: ' + err.message);
-    btn.disabled = false;
-    btn.innerHTML = 'Tiếp Tục → Xem Thông Tin Chuyển Khoản';
-  }
+  const ref = genRef();
+  const qr  = `https://qr.sepay.vn/img?acc=${BANK.acc}&bank=${BANK.name}&amount=${BANK.amount}&des=${ref}&template=compact&download=false`;
+  showPaymentPanel({ ref_code: ref, bank_name: BANK.name, account_number: BANK.acc, account_name: BANK.owner, qr_url: qr });
 }
 
 function showPaymentPanel(data) {
