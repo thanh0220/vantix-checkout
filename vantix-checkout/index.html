@@ -24,7 +24,15 @@
     hr.sep { border:none; border-top:1px solid var(--border); margin:0; }
 
     /* TOP BAR */
-    .top-bar { background:var(--red); color:#FFD700; font-family:'Roboto',sans-serif; font-weight:900; font-size:clamp(18px,3vw,28px); letter-spacing:1px; text-transform:uppercase; text-align:center; padding:20px 24px; width:100%; line-height:1.3; }
+    .top-bar { background:var(--red); color:#FFD700; font-family:'Roboto',sans-serif; font-weight:900; font-size:clamp(16px,2.5vw,24px); letter-spacing:1px; text-transform:uppercase; width:100%; line-height:1.3; overflow:hidden; white-space:nowrap; padding:14px 0; }
+    .top-bar-track { display:inline-flex; gap:0; animation:ticker 22s linear infinite; }
+    .top-bar-track:hover { animation-play-state:paused; }
+    .top-bar-item { padding:0 64px; }
+    .top-bar-sep { color:rgba(255,215,0,0.5); }
+    @keyframes ticker {
+      0%   { transform:translateX(0); }
+      100% { transform:translateX(-50%); }
+    }
 
     /* BADGE */
     .badge { display:inline-block; background:rgba(133,32,12,0.25); border:1px solid var(--red); color:#ff9980; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:5px 16px; border-radius:20px; margin-bottom:20px; }
@@ -78,8 +86,8 @@
     .perks-row { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; margin-bottom:48px; }
     .perks-row.reverse { direction:rtl; }
     .perks-row.reverse > * { direction:ltr; }
-    .perks-img { width:100%; background:transparent; border-radius:10px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-    .perks-img img { width:100%; height:auto; object-fit:contain; border-radius:0; }
+    .perks-img { width:100%; background:transparent; border-radius:10px; overflow:visible; display:flex; align-items:center; justify-content:center; }
+    .perks-img img { width:100%; height:auto; object-fit:contain; border-radius:10px; }
     .perks-img.placeholder { background:#2a2a2a; border:1px solid var(--border); aspect-ratio:16/9; }
     .perks-text { text-align:center; }
     .perks-text h3 { font-size:18px; font-weight:800; color:#fff; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; }
@@ -232,6 +240,184 @@
       .guarantee-box { flex-direction:column; text-align:center; }
       .session-body { padding-left:22px; }
     }
+
+    /* ── LAYOUT ── */
+    .layout { display:flex; min-height:100vh; }
+
+    .sidebar {
+      width:230px;
+      flex-shrink:0;
+      background:#141414;
+      border-right:1px solid var(--border);
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow-y:auto;
+      overflow-x:hidden;
+      display:flex;
+      flex-direction:column;
+      z-index:200;
+      transition:width .25s ease;
+    }
+    .sidebar.collapsed { width:60px; }
+
+    .sb-top {
+      padding:16px 14px 12px;
+      border-bottom:1px solid var(--border);
+      flex-shrink:0;
+    }
+    .sb-brand {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:0.8rem;
+      font-weight:800;
+      color:var(--light);
+      letter-spacing:.5px;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .sb-brand-dot {
+      width:30px;height:30px;
+      background:linear-gradient(135deg,var(--red),#c0392b);
+      border-radius:8px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:14px;
+      flex-shrink:0;
+    }
+    .sb-brand-text { transition:opacity .2s; font-size:.75rem; line-height:1.3; }
+    .collapsed .sb-brand-text { opacity:0;width:0; }
+
+    .sb-nav { flex:1;padding:10px 8px;overflow-y:auto; }
+
+    .sb-label {
+      font-size:.6rem;font-weight:800;letter-spacing:2px;
+      text-transform:uppercase;color:rgba(249,249,249,.3);
+      padding:12px 8px 6px;white-space:nowrap;overflow:hidden;
+    }
+    .collapsed .sb-label { opacity:0; }
+
+    .sb-item {
+      display:flex;align-items:center;gap:10px;
+      padding:9px 10px;border-radius:10px;
+      color:var(--muted);font-size:.78rem;font-weight:500;
+      text-decoration:none;cursor:pointer;
+      white-space:nowrap;overflow:hidden;
+      transition:background .15s,color .15s;
+      margin-bottom:2px;
+    }
+    .sb-item:hover { background:rgba(255,255,255,.06);color:var(--light); }
+    .sb-item.active { background:rgba(133,32,12,.25);color:#ff9980;font-weight:700; }
+    .sb-item-icon { font-size:1rem;flex-shrink:0;width:22px;text-align:center; }
+    .sb-item-text { transition:opacity .2s; }
+    .collapsed .sb-item-text { opacity:0;width:0; }
+
+    .sb-cta {
+      display:flex;align-items:center;gap:10px;
+      padding:10px 10px;border-radius:10px;
+      background:rgba(133,32,12,.35);
+      border:1px solid rgba(133,32,12,.6);
+      color:#ff9980;font-size:.78rem;font-weight:700;
+      text-decoration:none;cursor:pointer;
+      white-space:nowrap;overflow:hidden;
+      margin:8px 0 4px;
+      transition:background .15s;
+    }
+    .sb-cta:hover { background:var(--red);color:#fff; }
+    .collapsed .sb-cta-text { opacity:0;width:0; }
+
+    .sb-bottom {
+      padding:10px 8px;border-top:1px solid var(--border);flex-shrink:0;
+    }
+    .sb-collapse-btn {
+      display:flex;align-items:center;gap:8px;
+      width:100%;padding:9px 10px;
+      background:none;border:none;border-radius:10px;
+      color:var(--muted);font-size:.78rem;font-weight:600;
+      cursor:pointer;white-space:nowrap;overflow:hidden;
+      transition:background .15s,color .15s;
+      font-family:'Lato','Roboto',sans-serif;
+    }
+    .sb-collapse-btn:hover { background:rgba(255,255,255,.06);color:var(--light); }
+    .sb-collapse-arrow { flex-shrink:0;transition:transform .25s;font-size:.7rem; }
+    .collapsed .sb-collapse-arrow { transform:rotate(180deg); }
+    .sb-collapse-label { transition:opacity .2s; }
+    .collapsed .sb-collapse-label { opacity:0;width:0; }
+
+    .main-wrap { flex:1;min-width:0;overflow-x:hidden; }
+
+    /* ── TOPNAV ── */
+    .topnav {
+      position:fixed;top:0;z-index:190;
+      left:230px;right:0;
+      background:rgba(20,20,20,.97);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;
+      padding:0 16px;height:50px;gap:2px;
+      overflow-x:auto;
+      transition:left .25s ease;
+    }
+    body.sb-collapsed .topnav { left:60px; }
+    .main-wrap { padding-top:50px; }
+    @media(max-width:768px) { .topnav { left:0 !important; } }
+    .topnav::-webkit-scrollbar { display:none; }
+    .tn-link {
+      display:flex;align-items:center;gap:6px;
+      padding:6px 13px;border-radius:8px;
+      color:var(--muted);font-size:.78rem;font-weight:600;
+      text-decoration:none;white-space:nowrap;
+      transition:background .15s,color .15s;flex-shrink:0;
+    }
+    .tn-link:hover { background:rgba(255,255,255,.07);color:var(--light); }
+    .tn-link.active { background:rgba(133,32,12,.25);color:#ff9980; }
+    .tn-sep { width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0; }
+    .tn-right { margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0; }
+    .tn-cta {
+      background:var(--red);color:#fff;
+      font-size:.75rem;font-weight:700;
+      padding:6px 16px;border-radius:6px;
+      text-decoration:none;white-space:nowrap;
+      transition:background .15s;
+    }
+    .tn-cta:hover { background:var(--red2);color:#fff; }
+
+    /* ── HAMBURGER & BACKDROP ── */
+    .tn-hamburger {
+      display:none;align-items:center;justify-content:center;
+      background:none;border:none;color:var(--muted);
+      cursor:pointer;padding:7px 8px;border-radius:8px;
+      margin-right:6px;flex-shrink:0;
+      transition:background .15s,color .15s;
+    }
+    .tn-hamburger:hover { background:rgba(255,255,255,.08);color:var(--light); }
+    .sb-backdrop {
+      display:none;position:fixed;inset:0;
+      background:rgba(0,0,0,.6);z-index:250;
+      backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+    }
+    .sb-backdrop.active { display:block; }
+
+    /* ── MOBILE ── */
+    @media(max-width:768px) {
+      .layout { display:block; }
+      .sidebar {
+        position:fixed;left:0;top:0;height:100%;
+        width:230px !important;
+        transform:translateX(-100%);
+        transition:transform .25s ease;
+        z-index:300;
+      }
+      .sidebar.mobile-open { transform:translateX(0); }
+      .sidebar.collapsed { width:230px !important;transform:translateX(-100%); }
+      .collapsed .sb-brand-text,.collapsed .sb-item-text,
+      .collapsed .sb-label,.collapsed .sb-collapse-label,
+      .collapsed .sb-cta-text { opacity:1;width:auto; }
+      .main-wrap { width:100%; }
+      .tn-hamburger { display:flex; }
+      .sb-collapse-btn { display:none; }
+      body { padding-bottom:64px; }
+    }
   </style>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -243,8 +429,83 @@
 </head>
 <body>
 
+<div id="sbBackdrop" class="sb-backdrop" onclick="toggleSidebar()"></div>
+<div class="layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-top">
+    <div class="sb-brand">
+      <div class="sb-brand-dot">📈</div>
+      <span class="sb-brand-text">Văn Thành GT</span>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-label">— KHÁM PHÁ —</div>
+    <a class="sb-item" href="#top" data-section="top">
+      <span class="sb-item-icon">🏠</span>
+      <span class="sb-item-text">Tổng quan</span>
+    </a>
+    <a class="sb-item" href="#curriculum" data-section="curriculum">
+      <span class="sb-item-icon">📚</span>
+      <span class="sb-item-text">Nội dung khóa học</span>
+    </a>
+    <a class="sb-item" href="#perks" data-section="perks">
+      <span class="sb-item-icon">🏆</span>
+      <span class="sb-item-text">Quyền lợi học viên</span>
+    </a>
+    <a class="sb-item" href="#pricing" data-section="pricing">
+      <span class="sb-item-icon">💎</span>
+      <span class="sb-item-text">Bảng giá</span>
+    </a>
+    <a class="sb-item" href="#faq" data-section="faq">
+      <span class="sb-item-icon">❓</span>
+      <span class="sb-item-text">Câu hỏi thường gặp</span>
+    </a>
+    <div class="sb-label">— HÀNH ĐỘNG —</div>
+    <a class="sb-cta" href="checkout.html">
+      <span class="sb-item-icon">🛒</span>
+      <span class="sb-cta-text">Đăng Ký Ngay</span>
+    </a>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-collapse-btn" onclick="toggleSidebar()">
+      <span class="sb-collapse-arrow">◄</span>
+      <span class="sb-collapse-label">Thu nhỏ</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ══ MAIN WRAP ══ -->
+<div class="main-wrap">
+
+<!-- ══ TOPNAV ══ -->
+<nav class="topnav">
+  <button class="tn-hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <a class="tn-link" href="#curriculum">📚 Nội dung</a>
+  <a class="tn-link" href="#perks">🏆 Quyền lợi</a>
+  <a class="tn-link" href="#pricing">💎 Bảng giá</a>
+  <a class="tn-link" href="#faq">❓ FAQ</a>
+  <div class="tn-right">
+    <a class="tn-cta" href="checkout.html">Đăng Ký Ngay →</a>
+  </div>
+</nav>
+
 <!-- ══════════════════ TOP BAR ══════════════════ -->
-<div class="top-bar">KHÓA HỌC LÀM CHỦ VÀNG và BTC CHỈ VỚI 1 CHIẾC ĐIỆN THOẠI</div>
+<div class="top-bar" id="top">
+  <div class="top-bar-track">
+    <span class="top-bar-item">🔥 KHÓA HỌC LÀM CHỦ VÀNG và BTC CHỈ VỚI 1 CHIẾC ĐIỆN THOẠI</span>
+    <span class="top-bar-sep">✦</span>
+    <span class="top-bar-item">💎 Truy Cập Không Giới Hạn · EA Timing Bot 24/7 · Coaching 1:1 Zoom</span>
+    <span class="top-bar-sep">✦</span>
+    <span class="top-bar-item">🔥 KHÓA HỌC LÀM CHỦ VÀNG và BTC CHỈ VỚI 1 CHIẾC ĐIỆN THOẠI</span>
+    <span class="top-bar-sep">✦</span>
+    <span class="top-bar-item">💎 Truy Cập Không Giới Hạn · EA Timing Bot 24/7 · Coaching 1:1 Zoom</span>
+    <span class="top-bar-sep">✦</span>
+  </div>
+</div>
 
 <!-- ══════════════════ CURRICULUM ══════════════════ -->
 <section class="curriculum" id="curriculum">
@@ -340,7 +601,7 @@
 
 
 <!-- ══════════════════ PERKS ══════════════════ -->
-<section class="perks">
+<section class="perks" id="perks">
   <div class="perks-bg"></div>
   <div class="container">
     <div class="perks-title">Quyền Lợi Chỉ Dành Cho Học Viên</div>
@@ -581,7 +842,7 @@
 
 
 <!-- ══════════════════ FAQ ══════════════════ -->
-<section class="faq">
+<section class="faq" id="faq">
   <div class="container">
 
     <div class="faq-title">Câu Hỏi Thường Gặp</div>
@@ -662,7 +923,61 @@
 </div>
 
 
+</div><!-- /main-wrap -->
+</div><!-- /layout -->
+
 <script>
+  /* ── SIDEBAR TOGGLE ── */
+  function toggleSidebar() {
+    var sb = document.getElementById('sidebar');
+    var bd = document.getElementById('sbBackdrop');
+    if (window.innerWidth <= 768) {
+      sb.classList.toggle('mobile-open');
+      bd.classList.toggle('active');
+    } else {
+      sb.classList.toggle('collapsed');
+      document.body.classList.toggle('sb-collapsed', sb.classList.contains('collapsed'));
+    }
+  }
+
+  /* đóng sidebar khi bấm link trên mobile */
+  document.querySelectorAll('.sb-item, .sb-cta, .tn-link').forEach(function(a) {
+    a.addEventListener('click', function() {
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('mobile-open');
+        document.getElementById('sbBackdrop').classList.remove('active');
+      }
+    });
+  });
+
+  /* ── SCROLL SPY ── */
+  var sections = ['top','curriculum','perks','pricing','faq'];
+  var sbLinks  = document.querySelectorAll('.sb-item[data-section]');
+  var tnLinks  = document.querySelectorAll('.tn-link');
+
+  function onScroll() {
+    var scrollY = window.scrollY + 70;
+    var current = 'top';
+    sections.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) current = id;
+    });
+    sbLinks.forEach(function(a) { a.classList.toggle('active', a.dataset.section === current); });
+    tnLinks.forEach(function(a) { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  /* smooth scroll */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+
   function toggleFaq(btn) {
     const answer = btn.nextElementSibling;
     const isOpen = answer.classList.contains('open');
