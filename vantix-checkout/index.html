@@ -111,8 +111,12 @@
     .stack-val { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
     .stack-val .old { color:var(--muted); text-decoration:line-through; font-size:12px; }
     .stack-val .free { color:#6EE7A0; font-weight:900; font-size:14px; }
-    .ea-demo-btn { background:rgba(133,32,12,0.3); border:1px solid var(--red); color:#ff9980; font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; cursor:pointer; transition:.2s; }
-    .ea-demo-btn:hover { background:var(--red); color:#fff; }
+    .ea-demo-btn { background:rgba(133,32,12,0.2); border:2px solid #ff6b4a; color:#fff; font-size:12px; font-weight:700; padding:5px 14px; border-radius:20px; cursor:pointer; transition:.2s; box-shadow:0 0 10px rgba(255,107,74,0.5), inset 0 0 8px rgba(255,107,74,0.1); animation:eaBtnGlow 2s ease-in-out infinite; }
+    .ea-demo-btn:hover { background:var(--red); color:#fff; box-shadow:0 0 18px rgba(255,107,74,0.8); animation:none; }
+    @keyframes eaBtnGlow {
+      0%,100% { box-shadow:0 0 8px rgba(255,107,74,0.4), inset 0 0 6px rgba(255,107,74,0.1); }
+      50%      { box-shadow:0 0 18px rgba(255,107,74,0.75), inset 0 0 10px rgba(255,107,74,0.15); }
+    }
     .bonus-icon-box { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:28px 16px; text-align:center; }
     .bonus-icon-box { font-size:40px; }
     .bonus-icon-box span { font-size:13px; color:var(--muted); font-weight:600; }
@@ -148,21 +152,26 @@
     .pricing::before { content:''; position:absolute; inset:0; background:url('pricing-bg.png') center/cover no-repeat; opacity:0.18; pointer-events:none; }
     .pricing-eyebrow { text-align:center; font-size:13px; color:#f1c40f; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; font-weight:600; }
     .pricing h2 { font-size:clamp(22px,4vw,34px); font-weight:800; color:#fff; text-align:center; margin-bottom:40px; }
-    .pricing-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; align-items:start; }
+    .pricing-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:0; align-items:start; }
     @media(max-width:700px){ .pricing-cards { grid-template-columns:1fr; } }
-    .pricing-card { background:var(--dark3); border:1px solid var(--border); border-radius:16px; padding:32px 24px 24px; position:relative; transition:transform .2s; }
-    .pricing-card:hover { transform:translateY(-4px); }
-    .pricing-card.featured { border-color:var(--red); box-shadow:0 0 40px rgba(133,32,12,0.25); }
-    .pricing-card.lifetime { border-color:#f1c40f; box-shadow:0 0 40px rgba(241,196,15,0.15); }
-    .feat-badge { position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--red); color:#fff; font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:4px 16px; border-radius:20px; white-space:nowrap; }
-    .feat-badge-gold { background:linear-gradient(135deg,#b8860b,#f1c40f); color:#1a1a1a; }
-    .plan-icon { font-size:28px; margin-bottom:8px; }
-    .plan-name { font-size:20px; font-weight:800; color:#fff; margin-bottom:4px; }
-    .plan-desc { font-size:13px; color:var(--muted); margin-bottom:16px; }
-    .plan-original { font-size:13px; color:var(--muted); text-decoration:line-through; margin-bottom:4px; }
-    .plan-price { font-size:36px; font-weight:900; color:#ff9980; line-height:1; margin-bottom:2px; }
+    .pricing-card { background:transparent; border:none; border-right:1px solid rgba(255,255,255,0.08); border-radius:0; padding:0 24px 28px; position:relative; text-align:center; display:flex; flex-direction:column; }
+    .pricing-card .btn { margin-top:auto; }
+    .pricing-card:last-child { border-right:none; }
+    .pricing-card:hover { transform:none; }
+    .pricing-card.featured { border-color:transparent; box-shadow:none; }
+    .pricing-card.lifetime { border-color:transparent; box-shadow:none; }
+    .pricing-card > img { display:block; width:calc(100% + 48px); margin:0 -24px 20px; border-radius:0; }
+    .feat-badge { display:none; }
+    .feat-badge-gold { display:none; }
+    .plan-icon { display:none; }
+    .plan-name { font-size:22px; font-weight:900; color:#fff; margin-bottom:12px; text-align:center; letter-spacing:.5px; }
+    .plan-desc { font-size:14px; color:#fff; margin-bottom:16px; text-align:center; line-height:1.65; }
+    .plan-original { display:none; }
+    .plan-price { font-size:22px; font-weight:900; color:#f1c40f; line-height:1; display:inline; }
     .plan-price.gold { color:#f1c40f; }
-    .plan-price-sub { font-size:13px; color:var(--muted); margin-bottom:4px; }
+    .plan-price-label { font-size:15px; font-weight:700; color:#fff; }
+    .plan-price-wrap { margin-bottom:20px; }
+    .plan-price-sub { display:none; }
     .plan-price-vnd { font-size:12px; color:rgba(249,249,249,0.35); margin-bottom:8px; }
     .plan-saving { font-size:13px; color:#4fcc7a; font-weight:600; margin-bottom:20px; }
     .plan-features { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
@@ -170,8 +179,18 @@
     .plan-features .check { color:#4fcc7a; flex-shrink:0; }
     .plan-features .x { color:#666; flex-shrink:0; }
     .plan-features .gift { flex-shrink:0; }
-    .demo-inline-btn { background:rgba(133,32,12,0.35); border:1px solid rgba(133,32,12,0.5); color:#ff9980; padding:2px 9px; border-radius:4px; font-size:11px; cursor:pointer; margin-left:4px; white-space:nowrap; transition:.15s; }
-    .demo-inline-btn:hover { background:var(--red); color:#fff; }
+    .demo-inline-btn { background:rgba(133,32,12,0.35); border:1px solid rgba(133,32,12,0.5); color:#ff9980; padding:3px 10px; border-radius:4px; font-size:11px; cursor:pointer; margin-left:8px; white-space:nowrap; transition:.15s; animation:demoBtnPop 2.8s ease-in-out infinite; position:relative; }
+    .demo-inline-btn::before { content:'←'; position:absolute; left:-18px; top:50%; transform:translateY(-50%); color:#ff9980; font-size:12px; animation:arrowBounce 1s ease-in-out infinite; pointer-events:none; }
+    .demo-inline-btn:hover { background:var(--red); color:#fff; animation:none; transform:scale(1.08); }
+    .demo-inline-btn:hover::before { color:var(--red); }
+    @keyframes demoBtnPop {
+      0%,100% { box-shadow:0 0 0 0 rgba(133,32,12,0); }
+      50%      { box-shadow:0 0 0 4px rgba(133,32,12,0.45); }
+    }
+    @keyframes arrowBounce {
+      0%,100% { transform:translateY(-50%) translateX(0); }
+      50%      { transform:translateY(-50%) translateX(-4px); }
+    }
     .plan-note { text-align:center; font-size:12px; color:var(--muted); margin-top:12px; }
     .btn-gold { background:linear-gradient(135deg,#b8860b,#f1c40f) !important; color:#1a1a1a !important; border:none !important; }
     .btn-gold:hover { opacity:0.88; }
@@ -751,67 +770,69 @@
 <!-- ══════════════════ PRICING ══════════════════ -->
 <section class="pricing" id="pricing">
   <div class="container" style="position:relative;z-index:1;">
-    <div class="pricing-eyebrow">💎 3 Lựa Chọn Đầu Tư</div>
-    <h2>Chọn Gói Phù Hợp Với Bạn</h2>
+    <div style="background:#5C0000;margin:-72px -9999px 48px;padding:16px 9999px;text-align:center;font-size:15px;font-weight:800;color:#fff;letter-spacing:2px;text-transform:uppercase;">NHỮNG GÌ BẠN NHẬN ĐƯỢC</div>
+
+    <style>
+      .card-mid { min-height:52px; display:flex; align-items:center; justify-content:center; margin-bottom:0; }
+      .tier-tabs { display:flex; gap:4px; background:rgba(255,255,255,0.06); border-radius:8px; padding:4px; justify-content:center; width:100%; }
+      .tier-tab { flex:1; padding:7px 4px; border:none; background:none; color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; border-radius:6px; transition:.15s; font-family:'Lato','Roboto',sans-serif; white-space:nowrap; }
+      .tier-tab:hover { color:var(--light); }
+      .tier-tab.active { background:var(--red); color:#fff; }
+      .tier-price-panel { display:none; }
+      .tier-price-panel.active { display:block; }
+      .tier-features { display:none; margin-bottom:24px; }
+      .tier-features.active { display:flex; }
+    </style>
 
     <div class="pricing-cards">
 
-      <!-- Gói Tháng -->
+      <!-- KHÓA HỌC (3 tiers) -->
       <div class="pricing-card">
-        <div class="plan-icon">📱</div>
-        <div class="plan-name">Gói Tháng</div>
-        <div class="plan-price">$19.99</div>
-        <div class="plan-price-sub">mỗi tháng · ≈ 526.836đ</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Hệ thống SNR Master</li>
-          <li><span class="check">✓</span> 50 bài học · 8h 12p</li>
-          <li><span class="check">✓</span> Cập nhật hàng tuần</li>
-          <li><span class="check">✓</span> Discord VIP</li>
-          <li><span class="check">✓</span> Hủy bất cứ lúc nào</li>
-          <li><span class="gift">🎁</span> EA Timing Bot <span style="color:var(--muted);font-size:12px;">(thử 60 ngày)</span></li>
-          <li><span class="gift">🎁</span> Khóa Giao Dịch Vàng</li>
-        </ul>
-        <a href="checkout.html?plan=month" class="btn btn-block btn-outline">Bắt Đầu Ngay →</a>
+        <img src="00.png" alt="Khóa Học" style="width:100%;border-radius:8px;margin-bottom:14px;display:block;" />
+        <div class="plan-name">KHÓA HỌC</div>
+        <div class="card-mid">
+          <div class="tier-tabs">
+            <button class="tier-tab active" data-tier="month">Tháng</button>
+            <button class="tier-tab" data-tier="year">Năm</button>
+            <button class="tier-tab" data-tier="lifetime">Vĩnh Viễn</button>
+          </div>
+        </div>
+
+        <div class="plan-desc" style="margin:16px 0 16px;">50+ bài học được Văn Thành GT ghi lại giúp bạn nắm vững Supply Demand & Price Action — học theo tốc độ của riêng bạn, xem lại bất cứ lúc nào.</div>
+
+        <div class="tier-price-panel active" data-panel="month">
+          <div class="plan-price-wrap"><span class="plan-price-label">Giá trị: </span><span class="plan-price">$19.99</span></div>
+        </div>
+        <div class="tier-price-panel" data-panel="year">
+          <div class="plan-price-wrap"><span class="plan-price-label">Giá trị: </span><span class="plan-price">$239.88</span></div>
+        </div>
+        <div class="tier-price-panel" data-panel="lifetime">
+          <div class="plan-price-wrap"><span class="plan-price-label">Giá trị: </span><span class="plan-price">6.898.000 VNĐ</span></div>
+        </div>
+
+        <a id="tierCta" href="checkout.html?plan=month" class="btn btn-block">Đăng Ký Ngay</a>
       </div>
 
-      <!-- Gói Năm -->
+      <!-- HỌC ONLINE (ZOOM) -->
       <div class="pricing-card featured">
-        <span class="feat-badge">🔥 Phổ biến — Tiết kiệm 17%</span>
-        <div class="plan-icon">⚡</div>
-        <div class="plan-name">Gói Năm</div>
-        <div class="plan-price">$239.88</div>
-        <div class="plan-price-sub">mỗi năm · ≈ 6.322.037đ</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Tất cả Gói Tháng</li>
-          <li><span class="check">✓</span> Hỗ trợ 1-1 Zoom</li>
-          <li><span class="check">✓</span> Tính năng mới sớm nhất</li>
-          <li><span class="check">✓</span> Template giao dịch</li>
-          <li><span class="gift">🎁</span> EA Timing Bot 24/7 <button class="demo-inline-btn" onclick="openDemo('ea')">Xem</button></li>
-          <li><span class="gift">🎁</span> Chỉ Báo + EA Quản Lý Vốn <button class="demo-inline-btn" onclick="openDemo('chibao')">Xem</button></li>
-          <li><span class="gift">🎁</span> 8 Bộ Nến Entry <button class="demo-inline-btn" onclick="openDemo('nen')">Xem</button></li>
-        </ul>
-        <a href="checkout.html?plan=year" class="btn btn-block">Đăng Ký Ngay →</a>
+        <span class="feat-badge">🔥 Phổ biến nhất</span>
+        <img src="zoom-1.png" alt="Học Online Zoom" style="width:100%;border-radius:8px;margin-bottom:14px;display:block;" />
+        <div class="plan-name">HỌC ONLINE (ZOOM)</div>
+        <div class="card-mid"></div>
+        <div class="plan-desc" style="margin:0 0 16px;">Học 1-1 trực tiếp với Văn Thành GT qua Zoom. Đặt câu hỏi, phân tích chart thực tế và được sửa lỗi ngay trong buổi học.</div>
+        <div class="plan-price-wrap"><span class="plan-price-label">Giá trị: </span><span class="plan-price">15.000.000 VNĐ</span></div>
+        <a href="checkout.html?plan=year" class="btn btn-block">Đăng Ký Ngay</a>
       </div>
 
-      <!-- Gói Lifetime -->
+      <!-- HỌC TẠI GROUP -->
       <div class="pricing-card lifetime">
         <span class="feat-badge feat-badge-gold">💎 Đầu tư 1 lần — Hưởng lợi mãi mãi</span>
-        <div class="plan-icon">👑</div>
-        <div class="plan-name">Gói Lifetime</div>
-        <div class="plan-original">Giá trị: 118.398.000đ</div>
-        <div class="plan-price gold">9.160.000đ</div>
-        <div class="plan-price-sub">1 lần duy nhất · tiết kiệm 109 triệu</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Truy cập vĩnh viễn</li>
-          <li><span class="check">✓</span> Cập nhật mãi mãi — <span style="color:#f1c40f;">MIỄN PHÍ</span></li>
-          <li><span class="check">✓</span> Không phí thêm bao giờ</li>
-          <li><span class="check">✓</span> Hỗ trợ VIP cao nhất</li>
-          <li><span class="check">✓</span> Coaching 1:1 Zoom <button class="demo-inline-btn" onclick="openDemo('zoomvip')">Xem</button></li>
-          <li><span class="gift">🎁</span> 7 quà tặng trị giá 118 triệu</li>
-          <li><span class="gift">🎁</span> Cộng đồng Lifetime</li>
-          <li><span class="gift">🎁</span> 100+ PDF Workbook</li>
-        </ul>
-        <a href="checkout.html?plan=lifetime" class="btn btn-block btn-gold">Sở Hữu Ngay →</a>
+        <img src="BONUS (1).png" alt="Học Tại Group" style="width:100%;border-radius:8px;margin-bottom:14px;display:block;" />
+        <div class="plan-name">HỌC TẠI GROUP</div>
+        <div class="card-mid"></div>
+        <div class="plan-desc" style="margin:0 0 16px;">Tham gia nhóm học viên cùng tiến. Hỏi bất kỳ câu hỏi nào về giao dịch, phân tích chart, quản lý vốn hay tâm lý trading — được giải đáp trực tiếp.</div>
+        <div class="plan-price-wrap"><span class="plan-price-label">Giá trị: </span><span class="plan-price gold">9.898.000 VNĐ</span></div>
+        <a href="checkout.html?plan=lifetime" class="btn btn-block">Đăng Ký Ngay</a>
       </div>
 
     </div>
@@ -822,22 +843,22 @@
         <thead>
           <tr>
             <th>Tính năng</th>
-            <th>Tháng</th>
-            <th class="col-year">Năm ⭐</th>
-            <th>Lifetime</th>
+            <th>KHÓA HỌC</th>
+            <th class="col-year">HỌC ONLINE (ZOOM) ⭐</th>
+            <th>HỌC TẠI GROUP</th>
           </tr>
         </thead>
         <tbody>
           <tr><td>Hệ thống SNR Master</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
-          <tr><td>Khóa Giao Dịch Vàng (50 bài)</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
+          <tr><td>50 bài học · 8h 12p</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
+          <tr><td>Cập nhật vĩnh viễn miễn phí</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
           <tr><td>Discord VIP</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
+          <tr><td>Template giao dịch</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
           <tr><td>EA Timing Bot 24/7</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
-          <tr><td>Chỉ Báo Tín Hiệu + EA Quản Lý Vốn</td><td class="cx">—</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
-          <tr><td>8 Bộ Nến Entry</td><td class="cx">—</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
-          <tr><td>Coaching 1:1 Zoom</td><td class="cx">—</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
-          <tr><td>Kho 100+ PDF Workbook</td><td class="cx">—</td><td class="col-year cx">—</td><td class="ci">✓</td></tr>
-          <tr><td>Cập nhật vĩnh viễn miễn phí</td><td class="cx">—</td><td class="col-year cx">—</td><td class="ci">✓</td></tr>
-          <tr><td>Cộng đồng Lifetime</td><td class="cx">—</td><td class="col-year cx">—</td><td class="ci">✓</td></tr>
+          <tr><td>Chỉ Báo Tín Hiệu + EA Quản Lý Vốn</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
+          <tr><td>8 Bộ Nến Entry</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
+          <tr><td>100+ PDF Workbook</td><td class="ci">✓</td><td class="col-year ci">✓</td><td class="ci">✓</td></tr>
+          <tr><td>Coaching 1:1 Zoom</td><td class="cx">—</td><td class="col-year ci" style="color:#f1c40f;">★</td><td class="cx">—</td></tr>
         </tbody>
       </table>
     </div>
@@ -908,6 +929,8 @@
 </section>
 
 
+
+
 <!-- ══════════════════ BONUS ══════════════════ -->
 <style>
 .dl-wrap{position:relative;background:#0d0000;border:2px solid #C8922A;border-radius:24px;margin:60px auto;max-width:760px;padding:56px 40px 48px;text-align:center;overflow:hidden;box-shadow:0 0 60px rgba(200,146,42,.22),0 0 120px rgba(200,146,42,.08);}
@@ -944,7 +967,6 @@
   </a>
   <p class="dl-free-note">Hoàn toàn miễn phí · Không cần đăng ký · Xem ngay</p>
 </div>
-
 
 <!-- FOOTER -->
 <footer>
@@ -1124,6 +1146,169 @@ function closeDemo() {
 }
 
 document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeDemo(); });
+
+/* ── TIER TABS (KHÓA HỌC card) ── */
+var tierCta = document.getElementById('tierCta');
+var tierCtaMap = {
+  month:    { href: 'checkout.html?plan=month',      text: 'Đăng Ký Ngay', cls: 'btn btn-block' },
+  year:     { href: 'checkout.html?plan=khoa-year',  text: 'Đăng Ký Ngay', cls: 'btn btn-block' },
+  lifetime: { href: 'checkout.html?plan=khoa-vinh',  text: 'Đăng Ký Ngay', cls: 'btn btn-block' }
+};
+document.querySelectorAll('.tier-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var tier = this.dataset.tier;
+    document.querySelectorAll('.tier-tab').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.tier-price-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelector('.tier-price-panel[data-panel="' + tier + '"]').classList.add('active');
+    tierCta.href = tierCtaMap[tier].href;
+    tierCta.textContent = tierCtaMap[tier].text;
+    tierCta.className = tierCtaMap[tier].cls;
+  });
+});
+</script>
+
+
+<!-- ══════════════════ EXIT-INTENT POPUP ══════════════════ -->
+<style>
+#exitPopup {
+  position:fixed;inset:0;z-index:99999;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  padding:20px;
+}
+#exitPopup.show { display:flex; }
+.ep-box {
+  position:relative;background:#0d0000;
+  border:2px solid #C8922A;border-radius:24px;
+  max-width:520px;width:100%;padding:44px 36px 36px;
+  text-align:center;overflow:hidden;
+  box-shadow:0 0 80px rgba(200,146,42,.3),0 30px 80px rgba(0,0,0,.8);
+  animation:epSlideIn .35s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes epSlideIn {
+  from { transform:translateY(-30px) scale(0.95); opacity:0; }
+  to   { transform:translateY(0) scale(1); opacity:1; }
+}
+.ep-glow {
+  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:320px;height:220px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(200,146,42,.22) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ep-close {
+  position:absolute;top:14px;right:14px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  color:rgba(249,249,249,.5);width:34px;height:34px;border-radius:50%;
+  font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.2s;
+}
+.ep-close:hover { background:rgba(255,255,255,.15);color:#fff;transform:rotate(90deg); }
+.ep-tag {
+  display:inline-block;background:rgba(200,146,42,.15);
+  border:1px solid rgba(200,146,42,.45);color:#C8922A;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;margin-bottom:18px;
+}
+.ep-title {
+  font-family:'Roboto',sans-serif;font-size:clamp(1.3rem,4vw,1.75rem);
+  font-weight:900;color:#F9F9F9;line-height:1.25;margin-bottom:6px;
+}
+.ep-title span {
+  background:linear-gradient(90deg,#C8922A,#e53935);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.ep-sub {
+  font-size:.85rem;color:rgba(249,249,249,.45);line-height:1.6;margin-bottom:20px;
+}
+.ep-perks {
+  display:flex;flex-direction:column;gap:9px;
+  margin:0 auto 24px;max-width:340px;text-align:left;
+}
+.ep-perk {
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:.83rem;color:rgba(249,249,249,.75);line-height:1.5;
+}
+.ep-perk-icon { color:#C8922A;flex-shrink:0;margin-top:2px; }
+.ep-btn {
+  display:inline-block;
+  background:linear-gradient(135deg,#C8922A,#e53935);
+  color:#fff;font-family:'Roboto',sans-serif;font-weight:900;
+  font-size:.95rem;letter-spacing:.5px;
+  padding:15px 36px;border-radius:12px;text-decoration:none;text-transform:uppercase;
+  box-shadow:0 6px 28px rgba(200,146,42,.5);
+  animation:epPulse 2.2s ease-in-out infinite;transition:transform .2s;
+  border:none;cursor:pointer;
+}
+.ep-btn:hover { transform:scale(1.04);color:#fff; }
+@keyframes epPulse {
+  0%,100% { box-shadow:0 6px 28px rgba(200,146,42,.5); }
+  50%      { box-shadow:0 6px 50px rgba(200,146,42,.85),0 0 70px rgba(229,57,53,.3); }
+}
+.ep-dismiss {
+  display:block;margin-top:14px;font-size:12px;
+  color:rgba(249,249,249,.25);cursor:pointer;
+  transition:color .2s;background:none;border:none;
+  font-family:'Lato','Roboto',sans-serif;
+}
+.ep-dismiss:hover { color:rgba(249,249,249,.5); }
+@media(max-width:480px){ .ep-box{padding:36px 20px 28px;} }
+</style>
+
+<div id="exitPopup">
+  <div class="ep-box">
+    <div class="ep-glow"></div>
+    <button class="ep-close" onclick="closeExitPopup()">✕</button>
+    <div class="ep-tag">🎁 Quà tặng miễn phí</div>
+    <h2 class="ep-title">3 Bí Mật Khiến <span>87% Trader Việt</span><br>Liên Tục Cháy Tài Khoản</h2>
+    <p class="ep-sub">Trước Khi Họ Kịp Nhận Ra</p>
+    <div class="ep-perks">
+      <div class="ep-perk"><span class="ep-perk-icon">▶</span><span>BÍ MẬT 1: Tại sao RSI &amp; MACD khiến bạn liên tục bị SL</span></div>
+      <div class="ep-perk"><span class="ep-perk-icon">▶</span><span>BÍ MẬT 2: Cách chọn điểm đảo chiều xác suất cao</span></div>
+      <div class="ep-perk"><span class="ep-perk-icon">▶</span><span>BÍ MẬT 3: Thứ tôi ước biết trước khi cháy 24 triệu trong 1 đêm</span></div>
+    </div>
+    <a class="ep-btn" href="https://www.mediafire.com/file/xvxwi50al1l0a0x/3_B%25C3%25AD_M%25E1%25BA%25ADt_Khi%25E1%25BA%25BFn_87%2525_Trader_Vi%25E1%25BB%2587t_Li%25C3%25AAn_T%25E1%25BB%25A5c_Ch%25C3%25A1y_T%25C3%25A0i_Kho%25E1%25BA%25A3n_Tr%25C6%25B0%25E1%25BB%259Bc_Khi_H%25E1%25BB%258D_K%25E1%25BB%258Bp_Nh%25E1%25BA%25ADn_Ra.html/file" target="_blank" rel="noopener" onclick="closeExitPopup()">
+      ▶ XEM NGAY MIỄN PHÍ
+    </a>
+    <button class="ep-dismiss" onclick="closeExitPopup()">Không cảm ơn, tôi muốn tiếp tục thua lỗ</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var shown = false;
+
+  function showExitPopup() {
+    if (shown) return;
+    if (sessionStorage.getItem('exitPopupDismissed')) return;
+    shown = true;
+    document.getElementById('exitPopup').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.addEventListener('mouseleave', function(e) {
+    if (e.clientY <= 0) showExitPopup();
+  });
+
+  var mobileTimer;
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) showExitPopup();
+  });
+
+  window.closeExitPopup = function() {
+    document.getElementById('exitPopup').classList.remove('show');
+    document.body.style.overflow = '';
+    sessionStorage.setItem('exitPopupDismissed', '1');
+  };
+
+  document.getElementById('exitPopup').addEventListener('click', function(e) {
+    if (e.target === this) closeExitPopup();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeExitPopup();
+  });
+})();
 </script>
 
 </body>

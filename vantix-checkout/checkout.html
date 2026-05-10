@@ -165,7 +165,7 @@ input::placeholder{color:var(--muted);}
       </div>
       <div class="bank-row">
         <span class="bank-label">Số tiền</span>
-        <span class="bank-value" style="color:var(--gold-light)">9.160.000đ</span>
+        <span class="bank-value" style="color:var(--gold-light)" id="bankAmount">–</span>
       </div>
       <div class="bank-row">
         <span class="bank-label">Nội dung CK ⚠️</span>
@@ -232,29 +232,31 @@ input::placeholder{color:var(--muted);}
 
 <script>
 const PLANS = {
-  month:    { title: 'Gói Tháng 📱',    amount: '$19.99', period: 'mỗi tháng — thanh toán qua Whop',       whopUrl: 'https://whop.com/checkout/plan_3al2H4nQ4FUyE' },
-  year:     { title: 'Gói Năm ⚡',      amount: '$239.88', period: 'mỗi năm — thanh toán qua Whop',        whopUrl: 'https://whop.com/checkout/plan_GBEJNvqXCKjj6' },
-  lifetime: { title: 'Gói Lifetime 👑', amount: '9.160.000đ', period: 'thanh toán 1 lần, dùng mãi mãi',   whopUrl: null },
+  month:        { title: 'Khóa Học — Gói Tháng 📚',     amount: '$19.99',      period: 'mỗi tháng — thanh toán qua Whop',          whopUrl: 'https://whop.com/checkout/plan_3al2H4nQ4FUyE', bankAmount: null },
+  'khoa-year':  { title: 'Khóa Học — Gói Năm 📚',       amount: '$239.88',     period: 'mỗi năm — thanh toán qua Whop',            whopUrl: 'https://whop.com/checkout/plan_GBEJNvqXCKjj6', bankAmount: null },
+  'khoa-vinh':  { title: 'Khóa Học — Vĩnh Viễn 📚',    amount: '6.898.000đ',  period: 'thanh toán 1 lần, truy cập vĩnh viễn',     whopUrl: null,                                          bankAmount: 6898000 },
+  year:         { title: 'Học Online (Zoom) 🎥',         amount: '15.000.000đ', period: 'thanh toán 1 lần — học trực tiếp qua Zoom', whopUrl: null,                                          bankAmount: 15000000 },
+  lifetime:     { title: 'Học Tại Group 👥',             amount: '9.898.000đ',  period: 'thanh toán 1 lần, dùng mãi mãi',           whopUrl: null,                                          bankAmount: 9898000 },
 };
 
 const params = new URLSearchParams(window.location.search);
 const plan = params.get('plan') || 'lifetime';
 const p = PLANS[plan] || PLANS.lifetime;
-const isLifetime = plan === 'lifetime';
+const isBankTransfer = !p.whopUrl;
 
-document.getElementById('infoTitle').textContent = p.title;
-document.getElementById('infoSub').textContent   = isLifetime ? 'Truy cập vĩnh viễn – thanh toán 1 lần duy nhất' : 'Nhập thông tin để chuyển thẳng sang trang thanh toán Whop';
+document.getElementById('infoTitle').textContent  = p.title;
+document.getElementById('infoSub').textContent    = isBankTransfer ? 'Thanh toán 1 lần qua chuyển khoản ngân hàng' : 'Nhập thông tin để chuyển thẳng sang trang thanh toán Whop';
 document.getElementById('infoAmount').textContent = p.amount;
 document.getElementById('infoPeriod').textContent = p.period;
-document.getElementById('btnContinue').textContent = isLifetime ? 'Tiếp Tục → Xem Thông Tin Chuyển Khoản' : 'Tiếp Tục → Thanh Toán Trên Whop';
-if (!isLifetime) document.getElementById('whopNote').classList.remove('hidden');
-if (isLifetime)  document.getElementById('stepBar').classList.remove('hidden');
+document.getElementById('btnContinue').textContent = isBankTransfer ? 'Tiếp Tục → Xem Thông Tin Chuyển Khoản' : 'Tiếp Tục → Thanh Toán Trên Whop';
+if (!isBankTransfer) document.getElementById('whopNote').classList.remove('hidden');
+if (isBankTransfer)  document.getElementById('stepBar').classList.remove('hidden');
 
 const BANK = {
   name:   'BIDV',
   acc:    '5310986313',
   owner:  'NGUYEN VAN THANH',
-  amount: 9160000,
+  amount: p.bankAmount,
 };
 
 function genRef() {
@@ -282,7 +284,7 @@ function submitForm() {
     body: JSON.stringify({ name, email, phone, plan }),
   }).catch(() => {});
 
-  if (!isLifetime) {
+  if (!isBankTransfer) {
     window.location.href = p.whopUrl + '?prefill_email=' + encodeURIComponent(email);
     return;
   }
@@ -299,11 +301,12 @@ function showPaymentPanel(data) {
   document.getElementById('stepB').className = 'step active';
 
   document.getElementById('qrImage').src     = data.qr_url;
-  document.getElementById('bankName').textContent  = data.bank_name;
-  document.getElementById('bankAcc').textContent   = data.account_number;
-  document.getElementById('bankOwner').textContent = data.account_name;
-  document.getElementById('refCode').textContent   = data.ref_code;
-  document.getElementById('refWarn').textContent   = data.ref_code;
+  document.getElementById('bankName').textContent   = data.bank_name;
+  document.getElementById('bankAcc').textContent    = data.account_number;
+  document.getElementById('bankOwner').textContent  = data.account_name;
+  document.getElementById('bankAmount').textContent = p.amount;
+  document.getElementById('refCode').textContent    = data.ref_code;
+  document.getElementById('refWarn').textContent    = data.ref_code;
   window._refCode = data.ref_code;
 }
 
