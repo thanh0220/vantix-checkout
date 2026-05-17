@@ -1422,6 +1422,15 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
 .sw-res-title { font-size:1.05rem; font-weight:900; color:#F5C842; margin-bottom:3px; font-family:'Lato',sans-serif; }
 .sw-res-desc { font-size:.73rem; color:rgba(249,249,249,.55); margin-bottom:10px; line-height:1.5; }
 
+/* Retry button (lose type) */
+.sw-retry-btn {
+  width:100%; background:linear-gradient(135deg,#b87a08,#F5C842); color:#071428;
+  font-weight:900; font-size:.88rem; padding:12px; border-radius:10px;
+  border:none; cursor:pointer; font-family:'Lato',sans-serif; margin-bottom:10px;
+  box-shadow:0 4px 14px rgba(212,160,23,.4); transition:.2s;
+}
+.sw-retry-btn:hover { transform:translateY(-1px); box-shadow:0 7px 20px rgba(212,160,23,.6); }
+
 /* 2-column choice buttons */
 .sw-choices {
   display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;
@@ -1668,6 +1677,8 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
       <div class="sw-res-icon" id="swResIcon">🎉</div>
       <div class="sw-res-title" id="swResTitle"></div>
       <div class="sw-res-desc" id="swResDesc"></div>
+      <!-- Nút thử lại khi mất lượt (còn lượt) -->
+      <button class="sw-retry-btn" id="swRetryBtn" onclick="swRetry()" style="display:none;">🎯 Thử Lại Ngay</button>
       <!-- 2 lựa chọn (hiện ngay khi trúng discount) -->
       <div class="sw-choices" id="swChoices" style="display:none;">
         <button class="sw-choice-get" onclick="swRevealCode()">📋 Lấy Mã</button>
@@ -1714,21 +1725,28 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
     { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:10, code:'SUPPLY10'  },
     { label:'THÊM\nLƯỢT',show:true,  ca:'#5C3A00', cb:'#7a5200', tc:'#FFD700', type:'extra',    val:1,  code:''          },
     { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:12, code:'ACTION12'  },
-    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:15, code:'BULL-VX'   },
+    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:18, code:'BULL-VX'   },
     { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'lose',     val:0,  code:''          },
-    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:18, code:'WHALE-18'  },
     { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:20, code:'PUMP-VX'   },
     { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:25, code:'MOON-25'   },
     { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:30, code:'DIAMOND30' },
     // Ô đặc biệt — tím rực, cực hiếm
     { label:'?',          show:false, ca:'#2D004D', cb:'#7B00D4', tc:'#EEB4FF', type:'ea_trial', val:0,  code:''          },
   ];
-  // Weighted probability — ea_trial cực hiếm (3/106 ≈ 2.8%)
-  var WEIGHTS = [10, 13, 12, 11, 5, 11, 10, 4, 8, 5, 4, 3, 3];
+  var WEIGHTS = [10, 13, 12, 11, 5, 11, 10, 4, 5, 4, 3, 3];
 
   var currentRot = 0;
   var isSpinning = false;
   var pendingUrl = 'checkout.html';
+  var _wonSegIdx = -1; // ô vừa quay trúng, để reveal label
+
+  function getRevealLabel(s) {
+    if (s.type === 'lose')     return 'MẤT\nLƯỢT';
+    if (s.type === 'extra')    return 'THÊM\nLƯỢT';
+    if (s.type === 'ea_trial') return 'JACK\nPOT';
+    if (s.type === 'discount') return 'GIẢM\n' + s.val + '%';
+    return s.label;
+  }
 
   /* ── localStorage turns ── */
   function getTurns() {
@@ -1825,11 +1843,16 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
       ctx.rotate(am + Math.PI / 2);
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillStyle = s.tc;
-      if (s.show) {
-        ctx.font = '700 9px Lato,Roboto,sans-serif';
-        var lines = s.label.split('\n'), lh = 11;
+      var isWon = (i === _wonSegIdx);
+      if (s.show || isWon) {
+        var revLabel = isWon ? getRevealLabel(s) : s.label;
+        var fontSize = isWon && s.type !== 'lose' && s.type !== 'extra' ? '8px' : '9px';
+        ctx.font = '700 ' + fontSize + ' Lato,Roboto,sans-serif';
+        if (isWon) { ctx.shadowColor = '#F5C842'; ctx.shadowBlur = 8; }
+        var lines = revLabel.split('\n'), lh = 11;
         for (var li = 0; li < lines.length; li++)
           ctx.fillText(lines[li], 0, (li - (lines.length - 1) / 2) * lh);
+        ctx.shadowBlur = 0;
       } else if (s.type === 'ea_trial') {
         ctx.shadowColor = '#CC44FF';
         ctx.shadowBlur  = 12;
@@ -1892,6 +1915,8 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
       canvas.style.transition = 'none';
       currentRot = target;
       isSpinning = false;
+      _wonSegIdx = winIdx; // reveal label trên wheel
+      drawWheel();
       showResult(winIdx, turns);
     }, 4900);
   };
@@ -1914,6 +1939,9 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
     reveal.style.display  = 'none';
     choices.style.display = 'none';
     document.getElementById('swEaBox').style.display = 'none';
+    document.getElementById('swRetryBtn').style.display = 'none';
+    // Ẩn spin button khi result đang hiện — tránh 2 thứ đồng thời
+    document.getElementById('swSpinBtn').style.display = 'none';
     var copyBtn = document.getElementById('swCopyBtn');
     if (copyBtn) { copyBtn.textContent = '📋 Copy'; copyBtn.classList.remove('copied'); }
 
@@ -1937,7 +1965,7 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
       desc.textContent = remainTurns > 0
         ? 'Tiếc quá! Còn ' + remainTurns + ' lượt — thử lại ngay!'
         : 'Hết lượt hôm nay. Chia sẻ bên cạnh để lấy thêm lượt!';
-      if (remainTurns > 0) document.getElementById('swSpinBtn').disabled = false;
+      if (remainTurns > 0) document.getElementById('swRetryBtn').style.display = 'block';
 
     } else if (seg.type === 'extra') {
       var nt = addExtraTurns(3); updateDots(Math.min(nt, 3));
@@ -1961,7 +1989,6 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
       tit.style.color  = '#F5C842';
       desc.textContent = 'Bạn vừa mở ra ô bí ẩn. Chọn bên dưới:';
       document.getElementById('swCodeText').textContent = seg.code;
-      saveWonDiscount(seg.code, seg.val); // lưu để dùng lại khi hết lượt
 
       // Nút skip: "Quay Tiếp" nếu còn lượt, "Bỏ Qua" nếu hết
       skipBtn.textContent = remainTurns > 0
@@ -1975,6 +2002,7 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
     var seg = _lastSeg;
     if (!seg) return;
     document.getElementById('swChoices').style.display = 'none';
+    saveWonDiscount(seg.code, seg.val); // lưu khi họ chủ động lấy mã, bỏ qua = mất
     var reveal  = document.getElementById('swCodeReveal');
     var btnUse  = document.getElementById('swBtnUse');
     var sep     = pendingUrl.includes('?') ? '&' : '?';
@@ -2006,8 +2034,18 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
   window.swKeepSpinning = function() {
     document.getElementById('swResult').classList.remove('show');
     var turns = getTurns();
-    document.getElementById('swSpinBtn').disabled = (turns <= 0);
-    document.getElementById('swSpinBtn').textContent = turns > 0 ? '🎯 QUAY TIẾP' : 'Hết lượt hôm nay';
+    var btn = document.getElementById('swSpinBtn');
+    btn.style.display = '';
+    btn.disabled = (turns <= 0);
+    btn.textContent = turns > 0 ? '🎯 QUAY TIẾP' : 'Hết lượt hôm nay';
+  };
+
+  window.swRetry = function() {
+    document.getElementById('swResult').classList.remove('show');
+    var btn = document.getElementById('swSpinBtn');
+    btn.style.display = '';
+    btn.disabled = false;
+    btn.textContent = '🎯 QUAY TIẾP';
   };
 
   /* ── Open / Close ── */
@@ -2032,8 +2070,10 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
     var pp = document.getElementById('swPrizePanel');
     if (pp) pp.classList.remove('show');
     _lastSeg = null;
+    _wonSegIdx = -1;
 
     var btn = document.getElementById('swSpinBtn');
+    btn.style.display = '';
     btn.disabled = (turns <= 0);
     btn.textContent = turns > 0 ? '🎯 QUAY NGAY' : 'Hết lượt hôm nay';
     document.getElementById('swResult').classList.remove('show');
