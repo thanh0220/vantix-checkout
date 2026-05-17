@@ -192,8 +192,18 @@
       50%      { transform:translateY(-50%) translateX(-4px); }
     }
     .plan-note { text-align:center; font-size:12px; color:var(--muted); margin-top:12px; }
-    .btn-gold { background:linear-gradient(135deg,#b8860b,#f1c40f) !important; color:#1a1a1a !important; border:none !important; }
-    .btn-gold:hover { opacity:0.88; }
+    .btn-gold {
+      background:linear-gradient(135deg,#b87a08,#F5C842) !important;
+      color:#071428 !important; border:none !important;
+      font-weight:900 !important; letter-spacing:.5px; text-transform:uppercase;
+      box-shadow:0 6px 20px rgba(212,160,23,.45);
+      animation:btn-gold-pulse 2.2s ease-in-out infinite;
+    }
+    .btn-gold:hover { transform:translateY(-3px) !important; box-shadow:0 10px 30px rgba(212,160,23,.65) !important; animation:none !important; }
+    @keyframes btn-gold-pulse {
+      0%,100% { box-shadow:0 6px 20px rgba(212,160,23,.45); }
+      55%      { box-shadow:0 6px 28px rgba(245,200,66,.75), 0 0 0 5px rgba(245,200,66,.12); }
+    }
     .comparison-wrap { margin-top:60px; overflow-x:auto; }
     .comparison-table { width:100%; border-collapse:collapse; font-size:14px; min-width:500px; }
     .comparison-table th, .comparison-table td { padding:11px 14px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.07); }
@@ -1723,9 +1733,30 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
     } catch(e) { return 3; }
   }
   function setTurns(n) {
-    try { localStorage.setItem('swData', JSON.stringify({ date: new Date().toDateString(), turns: n })); } catch(e) {}
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      var today = new Date().toDateString();
+      d.date = today; d.turns = n;
+      // giữ nguyên wonCode nếu cùng ngày
+      if (d.wonDate !== today) { delete d.wonCode; delete d.wonVal; delete d.wonDate; }
+      localStorage.setItem('swData', JSON.stringify(d));
+    } catch(e) {}
   }
   function addExtraTurns(n) { var t = getTurns() + n; setTurns(t); return t; }
+  function saveWonDiscount(code, val) {
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      d.wonCode = code; d.wonVal = val; d.wonDate = new Date().toDateString();
+      localStorage.setItem('swData', JSON.stringify(d));
+    } catch(e) {}
+  }
+  function getSavedDiscount() {
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      if (d.wonDate === new Date().toDateString() && d.wonCode) return { code: d.wonCode, val: d.wonVal };
+    } catch(e) {}
+    return null;
+  }
 
   /* ── Update dots ── */
   function updateDots(n) {
@@ -1925,6 +1956,7 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
       tit.style.color  = '#F5C842';
       desc.textContent = 'Bạn vừa mở ra ô bí ẩn. Chọn bên dưới:';
       document.getElementById('swCodeText').textContent = seg.code;
+      saveWonDiscount(seg.code, seg.val); // lưu để dùng lại khi hết lượt
 
       // Nút skip: "Quay Tiếp" nếu còn lượt, "Bỏ Qua" nếu hết
       skipBtn.textContent = remainTurns > 0
@@ -2007,6 +2039,32 @@ document.addEventListener('keydown', function(e) { if(e.key === 'Escape') closeD
     canvas.style.transform  = 'rotate(0deg)';
     currentRot = 0; isSpinning = false;
     drawWheel();
+
+    // Nếu hết lượt nhưng hôm nay đã quay được discount → hiện thẳng mã
+    if (turns <= 0) {
+      var saved = getSavedDiscount();
+      if (saved) {
+        _lastSeg = { type: 'discount', code: saved.code, val: saved.val };
+        var icon   = document.getElementById('swResIcon');
+        var tit    = document.getElementById('swResTitle');
+        var desc   = document.getElementById('swResDesc');
+        var choices= document.getElementById('swChoices');
+        var reveal = document.getElementById('swCodeReveal');
+        var btnUse = document.getElementById('swBtnUse');
+        icon.textContent = '🎉'; icon.style.display = 'block';
+        tit.textContent  = 'GIẢM ' + saved.val + '%! 🔥';
+        tit.style.color  = '#F5C842';
+        desc.textContent = 'Mã giảm giá hôm nay của bạn:';
+        choices.style.display = 'none';
+        document.getElementById('swCodeText').textContent = saved.code;
+        var sep = pendingUrl.indexOf('?') >= 0 ? '&' : '?';
+        btnUse.textContent = '✅ Đăng Ký Với Giảm ' + saved.val + '%';
+        btnUse.href = pendingUrl + sep + 'discount=' + saved.val + '&code=' + saved.code;
+        reveal.style.display = 'block';
+        document.getElementById('swResult').classList.add('show');
+        if (ib) ib.style.display = 'flex'; // hiện nút 🏆
+      }
+    }
   };
 
   window.swClose = function() {
