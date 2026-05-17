@@ -93,6 +93,35 @@ input::placeholder{color:var(--muted);}
 .act-note{text-align:center;margin-top:24px;padding:14px;background:rgba(39,199,106,.07);border:1px solid rgba(39,199,106,.2);border-radius:12px;color:var(--green-glow);font-size:.85rem;line-height:1.6;}
 
 @media(max-width:480px){.card{padding:24px 18px;}.bank-value{font-size:.85rem;}.act-step{padding:16px;}}
+
+/* ── DISCOUNT MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:rgba(5,10,25,0.85);backdrop-filter:blur(6px);}
+.modal-overlay.hidden{display:none!important;}
+.modal-box{background:linear-gradient(160deg,#0d1f3c,#071428);border:1px solid rgba(212,160,23,.45);border-radius:24px;
+  padding:36px 32px;max-width:440px;width:100%;text-align:center;position:relative;
+  box-shadow:0 0 60px rgba(212,160,23,.18);}
+.modal-badge{display:inline-block;background:linear-gradient(135deg,#D4A017,#F5C842);color:#0d1f3c;
+  font-weight:900;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;
+  border-radius:20px;margin-bottom:16px;}
+.modal-icon{font-size:3rem;margin-bottom:10px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;color:#fff;margin-bottom:8px;line-height:1.3;}
+.modal-subtitle{color:rgba(232,240,255,.65);font-size:.88rem;margin-bottom:24px;line-height:1.6;}
+.modal-price-box{background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.25);border-radius:16px;
+  padding:20px;margin-bottom:22px;}
+.modal-price-old{color:rgba(232,240,255,.4);font-size:.85rem;text-decoration:line-through;margin-bottom:6px;}
+.modal-price-new{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:900;color:#F5C842;line-height:1;}
+.modal-price-save{display:inline-block;background:rgba(39,199,106,.15);color:#6EE7A0;font-size:.78rem;
+  font-weight:800;padding:3px 10px;border-radius:8px;margin-top:8px;}
+.modal-timer{color:rgba(232,240,255,.55);font-size:.8rem;margin-bottom:22px;}
+.modal-timer span{color:#F5C842;font-weight:900;font-size:.95rem;}
+.btn-accept{width:100%;background:linear-gradient(135deg,#D4A017,#F5C842);color:#0d1f3c;font-weight:900;
+  text-transform:uppercase;letter-spacing:.5px;padding:15px;border-radius:14px;border:none;font-size:1rem;
+  cursor:pointer;box-shadow:0 8px 22px rgba(212,160,23,.4);transition:.2s;font-family:'Nunito',sans-serif;margin-bottom:10px;}
+.btn-accept:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(212,160,23,.6);}
+.btn-skip{width:100%;background:transparent;border:none;color:rgba(232,240,255,.35);font-size:.8rem;
+  cursor:pointer;padding:8px;font-family:'Nunito',sans-serif;transition:.15s;}
+.btn-skip:hover{color:rgba(232,240,255,.6);}
 </style>
 </head>
 <body>
@@ -230,33 +259,90 @@ input::placeholder{color:var(--muted);}
 
 </div>
 
+<!-- DISCOUNT MODAL -->
+<div class="modal-overlay hidden" id="discountModal">
+  <div class="modal-box">
+    <div class="modal-badge">🔒 Ưu Đãi Giới Hạn</div>
+    <div class="modal-icon">🎁</div>
+    <div class="modal-title">Khoan đã! Chúng tôi có quà cho bạn</div>
+    <div class="modal-subtitle">Bạn đang được tặng thêm <strong style="color:#F5C842;">giảm 12%</strong> — chỉ dành cho lần đăng ký này. Ưu đãi hết sau:</div>
+    <div class="modal-timer">⏳ <span id="countdownTimer">05:00</span></div>
+    <div class="modal-price-box">
+      <div class="modal-price-old" id="modalPriceOld"></div>
+      <div class="modal-price-new" id="modalPriceNew"></div>
+      <div class="modal-price-save" id="modalPriceSave"></div>
+    </div>
+    <button class="btn-accept" onclick="acceptDiscount()">✅ Nhận Ngay Ưu Đãi 12% →</button>
+    <button class="btn-skip" onclick="skipDiscount()">Không cảm ơn, tôi muốn trả giá gốc</button>
+  </div>
+</div>
+
 <script>
+// Bảng mã giảm giá từ vòng quay may mắn
+const DISCOUNT_CODES = {
+  'XAU-LUCKY': 5, 'SNR-08': 8, 'SUPPLY10': 10, 'ACTION12': 12,
+  'BULL-VX': 15, 'WHALE-18': 18, 'PUMP-VX': 20, 'MOON-25': 25, 'DIAMOND30': 30,
+};
+
 const PLANS = {
-  month:        { title: 'Khóa Học — Gói Tháng 📚',     amount: '$19.99',      period: 'mỗi tháng — thanh toán qua Whop',          whopUrl: 'https://whop.com/checkout/plan_3al2H4nQ4FUyE', bankAmount: null },
-  'khoa-year':  { title: 'Khóa Học — Gói Năm 📚',       amount: '$239.88',     period: 'mỗi năm — thanh toán qua Whop',            whopUrl: 'https://whop.com/checkout/plan_GBEJNvqXCKjj6', bankAmount: null },
-  'khoa-vinh':  { title: 'Khóa Học — Vĩnh Viễn 📚',    amount: '6.898.000đ',  period: 'thanh toán 1 lần, truy cập vĩnh viễn',     whopUrl: null,                                          bankAmount: 6898000 },
-  year:         { title: 'Học Online (Zoom) 🎥',         amount: '15.000.000đ', period: 'thanh toán 1 lần — học trực tiếp qua Zoom', whopUrl: null,                                          bankAmount: 15000000 },
-  lifetime:     { title: 'Học Tại Group 👥',             amount: '9.898.000đ',  period: 'thanh toán 1 lần, dùng mãi mãi',           whopUrl: null,                                          bankAmount: 9898000 },
+  full:         { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
+  // Giữ lại cho tương thích link cũ
+  month:        { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
+  'khoa-year':  { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
+  'khoa-vinh':  { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
+  year:         { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
+  lifetime:     { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
 };
 
 const params = new URLSearchParams(window.location.search);
-const plan = params.get('plan') || 'lifetime';
-const p = PLANS[plan] || PLANS.lifetime;
+const plan = params.get('plan') || 'full';
+const p = PLANS[plan] || PLANS.full;
 const isBankTransfer = !p.whopUrl;
 
+// Áp dụng mã giảm giá từ vòng quay (nếu có)
+const urlCode     = (params.get('code') || '').toUpperCase();
+const urlDiscount = parseInt(params.get('discount') || '0', 10);
+let appliedPct    = 0;
+let appliedCode   = '';
+if (urlCode && DISCOUNT_CODES[urlCode]) {
+  appliedPct  = DISCOUNT_CODES[urlCode];
+  appliedCode = urlCode;
+} else if (urlDiscount > 0 && urlDiscount <= 30) {
+  appliedPct = urlDiscount;
+}
+const discountedAmount = appliedPct > 0
+  ? Math.round(p.bankAmount * (1 - appliedPct / 100) / 1000) * 1000
+  : p.bankAmount;
+const displayAmount = appliedPct > 0
+  ? discountedAmount.toLocaleString('vi-VN') + 'đ'
+  : p.amount;
+
 document.getElementById('infoTitle').textContent  = p.title;
-document.getElementById('infoSub').textContent    = isBankTransfer ? 'Thanh toán 1 lần qua chuyển khoản ngân hàng' : 'Nhập thông tin để chuyển thẳng sang trang thanh toán Whop';
-document.getElementById('infoAmount').textContent = p.amount;
-document.getElementById('infoPeriod').textContent = p.period;
-document.getElementById('btnContinue').textContent = isBankTransfer ? 'Tiếp Tục → Xem Thông Tin Chuyển Khoản' : 'Tiếp Tục → Thanh Toán Trên Whop';
-if (!isBankTransfer) document.getElementById('whopNote').classList.remove('hidden');
-if (isBankTransfer)  document.getElementById('stepBar').classList.remove('hidden');
+document.getElementById('infoSub').textContent    = 'Thanh toán 1 lần qua chuyển khoản ngân hàng';
+document.getElementById('infoAmount').textContent = displayAmount;
+document.getElementById('infoPeriod').textContent = appliedPct > 0
+  ? '🎉 Giảm ' + appliedPct + '% — Mã: ' + (appliedCode || 'WHEEL') + ' | ' + p.period
+  : p.period;
+document.getElementById('btnContinue').textContent = 'Tiếp Tục → Xem Thông Tin Chuyển Khoản';
+document.getElementById('stepBar').classList.remove('hidden');
+
+// Hiển thị banner mã giảm giá nếu có
+if (appliedPct > 0) {
+  const banner = document.createElement('div');
+  banner.style.cssText = 'background:linear-gradient(135deg,rgba(212,160,23,.15),rgba(212,160,23,.08));border:1px solid rgba(212,160,23,.4);border-radius:12px;padding:12px 16px;margin-bottom:16px;text-align:center;';
+  banner.innerHTML = '<div style="font-size:.72rem;color:rgba(232,240,255,.5);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Ưu đãi vòng quay đang áp dụng</div>'
+    + '<div style="font-size:1.1rem;font-weight:900;color:#F5C842;">GIẢM ' + appliedPct + '%'
+    + (appliedCode ? ' &nbsp;·&nbsp; Mã: <span style=\"font-family:\'Courier New\',monospace;letter-spacing:2px;\">' + appliedCode + '</span>' : '') + '</div>'
+    + '<div style="font-size:.78rem;color:rgba(232,240,255,.5);margin-top:4px;">Giá gốc: ' + p.amount + ' → <strong style="color:#F5C842;">' + displayAmount + '</strong></div>';
+  const panelInfo = document.getElementById('panelInfo');
+  panelInfo.insertBefore(banner, panelInfo.querySelector('.form-group'));
+}
 
 const BANK = {
   name:   'BIDV',
   acc:    '5310986313',
   owner:  'NGUYEN VAN THANH',
-  amount: p.bankAmount,
+  amount: discountedAmount,
 };
 
 function genRef() {
@@ -266,6 +352,10 @@ function genRef() {
   return code;
 }
 
+let _pendingName = '', _pendingEmail = '', _pendingPhone = '';
+let _discountApplied = false;
+let _countdownInterval = null;
+
 function submitForm() {
   const name  = document.getElementById('inputName').value.trim();
   const email = document.getElementById('inputEmail').value.trim();
@@ -274,6 +364,63 @@ function submitForm() {
   if (!name)  { alert('Vui lòng nhập họ tên.'); return; }
   if (!email || !email.includes('@')) { alert('Vui lòng nhập email hợp lệ.'); return; }
 
+  _pendingName = name; _pendingEmail = email; _pendingPhone = phone;
+
+  // Hiển thị modal ưu đãi nếu chưa áp dụng
+  if (!_discountApplied) {
+    showDiscountModal();
+    return;
+  }
+
+  proceedCheckout();
+}
+
+function showDiscountModal() {
+  const modal = document.getElementById('discountModal');
+  document.getElementById('modalPriceOld').textContent = 'Giá gốc: ' + p.amount;
+  document.getElementById('modalPriceNew').textContent = p.discountDisplay || p.amount;
+  document.getElementById('modalPriceSave').textContent = '🎉 Bạn tiết kiệm 12% — chỉ hôm nay!';
+  modal.classList.remove('hidden');
+  startCountdown(5 * 60);
+}
+
+function startCountdown(seconds) {
+  clearInterval(_countdownInterval);
+  const el = document.getElementById('countdownTimer');
+  _countdownInterval = setInterval(() => {
+    if (seconds <= 0) {
+      clearInterval(_countdownInterval);
+      skipDiscount();
+      return;
+    }
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    el.textContent = m + ':' + s;
+    seconds--;
+  }, 1000);
+}
+
+function acceptDiscount() {
+  clearInterval(_countdownInterval);
+  _discountApplied = true;
+  // Cập nhật giá hiển thị nếu có discountAmount
+  if (p.discountAmount) {
+    BANK.amount = p.discountAmount;
+    document.getElementById('infoAmount').textContent = p.discountDisplay;
+    document.getElementById('bankAmount').textContent = p.discountDisplay;
+  }
+  document.getElementById('discountModal').classList.add('hidden');
+  proceedCheckout();
+}
+
+function skipDiscount() {
+  clearInterval(_countdownInterval);
+  document.getElementById('discountModal').classList.add('hidden');
+  _discountApplied = true; // không hiện lại
+  proceedCheckout();
+}
+
+function proceedCheckout() {
   const btn = document.getElementById('btnContinue');
   btn.disabled = true;
   btn.innerHTML = '<span class="loading-spinner"></span>Đang xử lý...';
@@ -281,11 +428,11 @@ function submitForm() {
   fetch('/.netlify/functions/save-customer', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, phone, plan }),
+    body: JSON.stringify({ name: _pendingName, email: _pendingEmail, phone: _pendingPhone, plan }),
   }).catch(() => {});
 
   if (!isBankTransfer) {
-    window.location.href = p.whopUrl + '?prefill_email=' + encodeURIComponent(email);
+    window.location.href = p.whopUrl + '?prefill_email=' + encodeURIComponent(_pendingEmail);
     return;
   }
 
@@ -304,7 +451,7 @@ function showPaymentPanel(data) {
   document.getElementById('bankName').textContent   = data.bank_name;
   document.getElementById('bankAcc').textContent    = data.account_number;
   document.getElementById('bankOwner').textContent  = data.account_name;
-  document.getElementById('bankAmount').textContent = p.amount;
+  document.getElementById('bankAmount').textContent = displayAmount;
   document.getElementById('refCode').textContent    = data.ref_code;
   document.getElementById('refWarn').textContent    = data.ref_code;
   window._refCode = data.ref_code;
