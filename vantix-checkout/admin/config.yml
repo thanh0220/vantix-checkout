@@ -1,0 +1,54 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: vi
+
+media_folder: "images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: "blog"
+    label: "Bài viết blog"
+    label_singular: "Bài viết"
+    folder: "_posts"
+    create: true
+    slug: "{{slug}}"
+    editor:
+      preview: false
+    fields:
+      - label: "Tiêu đề"
+        name: "title"
+        widget: "string"
+        hint: "60-70 ký tự, chứa từ khóa chính"
+      - label: "Mô tả SEO"
+        name: "description"
+        widget: "text"
+        hint: "150-160 ký tự — hiện trên Google"
+      - label: "Tóm tắt (hiện trên trang blog)"
+        name: "excerpt"
+        widget: "text"
+        hint: "1-2 câu hấp dẫn, khác với mô tả SEO"
+      - label: "Chủ đề"
+        name: "tag"
+        widget: "select"
+        options:
+          - "Supply Demand"
+          - "Price Action"
+          - "Smart Money"
+          - "Tâm lý trading"
+      - label: "Ngày đăng"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "DD/MM/YYYY"
+        time_format: false
+        default: ""
+      - label: "Thời gian đọc"
+        name: "read_time"
+        widget: "string"
+        default: "5 phút"
+        hint: "VD: 8 phút"
+      - label: "Nội dung bài viết"
+        name: "body"
+        widget: "markdown"
