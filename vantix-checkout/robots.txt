@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /checkout.html
+Disallow: /oto1.html
+Disallow: /downsell.html
+Disallow: /nen-500k.html
+Disallow: /qua-tang.html
+Disallow: /thank-you-nen.html
+
+# Cho phép Googlebot crawl hình ảnh preview
+User-agent: Googlebot-Image
+Allow: /preview-nen-1.jpg
+Allow: /mindmap.png
+
+Sitemap: https://vanthanhgt.com/sitemap.xml
