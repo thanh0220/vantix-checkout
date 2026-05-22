@@ -4,14 +4,14 @@ backend:
 
 locale: vi
 
-media_folder: "images/blog"
+media_folder: "vantix-checkout/images/blog"
 public_folder: "/images/blog"
 
 collections:
   - name: "blog"
     label: "Bài viết blog"
     label_singular: "Bài viết"
-    folder: "_posts"
+    folder: "vantix-checkout/_posts"
     create: true
     slug: "{{slug}}"
     editor:
