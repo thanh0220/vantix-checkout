@@ -64,16 +64,16 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .step-desc strong{color:var(--text);}
 .step-desc em{color:var(--gold-light);font-style:normal;font-weight:700;}
 /* Slider nav */
-.steps-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;}
-.steps-arrow{background:rgba(255,255,255,.07);border:1px solid var(--card-border);color:var(--gold-light);
-  width:38px;height:38px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;
-  justify-content:center;transition:.18s;flex-shrink:0;}
-.steps-arrow:hover:not(:disabled){background:rgba(212,160,23,.18);border-color:var(--gold);}
-.steps-arrow:disabled{opacity:.3;cursor:default;}
-.steps-dots{display:flex;gap:6px;align-items:center;}
-.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:.2s;}
-.step-dot.active{background:var(--gold);transform:scale(1.25);}
-.steps-counter{color:var(--muted);font-size:.8rem;font-weight:700;min-width:40px;text-align:center;}
+.steps-nav{display:flex;align-items:center;gap:0;margin-bottom:16px;overflow-x:auto;padding:6px 2px;}
+.steps-nav::-webkit-scrollbar{display:none;}
+.step-btn{width:34px;height:34px;min-width:34px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:900;font-size:.8rem;cursor:pointer;flex-shrink:0;transition:.2s;
+  background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.12);color:var(--muted);}
+.step-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0D1F3C;
+  border-color:var(--gold);transform:scale(1.15);}
+.step-btn.done{background:rgba(212,160,23,.15);border-color:rgba(212,160,23,.35);color:var(--gold-light);}
+.step-connector{flex:1;height:2px;background:rgba(255,255,255,.1);min-width:6px;}
+.step-connector.done{background:rgba(212,160,23,.35);}
 
 /* BANK BOX */
 .bank-box{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.25);
@@ -419,7 +419,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="page-header">
     <div class="page-icon">💳</div>
     <div class="page-title">Hướng Dẫn Thanh Toán</div>
-    <div class="page-sub">Chọn phương thức thanh toán phù hợp với bạn.<br>Sau khi thanh toán, chúng tôi kích hoạt trong <strong style="color:var(--green-glow);">24 giờ</strong>.</div>
   </div>
 
   <!-- SPIN TRIGGER -->
@@ -509,7 +508,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
   <!-- TAB SWITCHER -->
   <div class="tab-bar">
-    <button class="tab active" onclick="switchTab('visa')">💳 Thanh Toán Tự Động — VISA / Quốc Tế</button>
+    <button class="tab active" onclick="switchTab('visa')">💳 Thanh Toán Tự Động<br>VISA / Quốc Tế</button>
     <button class="tab" onclick="switchTab('bank')">🏦 Chuyển Khoản Ngân Hàng</button>
   </div>
 
@@ -527,12 +526,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       </div>
 
       <div class="steps-slider-wrap" id="stepsSlider">
-        <div class="steps-nav">
-          <button class="steps-arrow" id="stepsPrev" onclick="stepsGo(-1)" disabled>&#8592;</button>
-          <div class="steps-dots" id="stepsDots"></div>
-          <span class="steps-counter" id="stepsCounter">1 / 9</span>
-          <button class="steps-arrow" id="stepsNext" onclick="stepsGo(1)">&#8594;</button>
-        </div>
+        <div class="steps-nav" id="stepsNav"></div>
         <div class="steps-track-outer">
           <div class="steps-track" id="stepsTrack">
 
@@ -1272,10 +1266,7 @@ function openSpin(){ swOpen('checkout.html'); }
   var cur = 0, total = 9;
   var track = document.getElementById('stepsTrack');
   var outer = document.querySelector('.steps-track-outer');
-  var dotsWrap = document.getElementById('stepsDots');
-  var counter = document.getElementById('stepsCounter');
-  var prevBtn = document.getElementById('stepsPrev');
-  var nextBtn = document.getElementById('stepsNext');
+  var nav   = document.getElementById('stepsNav');
   var startX = 0, isDrag = false;
 
   function syncHeight(){
@@ -1283,38 +1274,51 @@ function openSpin(){ swOpen('checkout.html'); }
     if(slides[cur]) outer.style.height = slides[cur].offsetHeight + 'px';
   }
 
-  // build dots
+  // build numbered progress bar
   for(var i=0;i<total;i++){
-    var d = document.createElement('span');
-    d.className = 'step-dot' + (i===0?' active':'');
-    d.setAttribute('data-i', i);
-    d.onclick = function(){ stepsGoTo(+this.getAttribute('data-i')); };
-    dotsWrap.appendChild(d);
+    if(i>0){
+      var line = document.createElement('div');
+      line.className = 'step-connector';
+      line.id = 'scon-'+(i-1);
+      nav.appendChild(line);
+    }
+    var btn = document.createElement('div');
+    btn.className = 'step-btn' + (i===0?' active':'');
+    btn.textContent = i+1;
+    btn.setAttribute('data-i', i);
+    btn.onclick = function(){ stepsGoTo(+this.getAttribute('data-i')); };
+    nav.appendChild(btn);
+  }
+
+  function updateNav(){
+    nav.querySelectorAll('.step-btn').forEach(function(b,i){
+      b.classList.toggle('active', i===cur);
+      b.classList.toggle('done', i<cur);
+    });
+    nav.querySelectorAll('.step-connector').forEach(function(c,i){
+      c.classList.toggle('done', i<cur);
+    });
+    // scroll active btn into view
+    var active = nav.querySelector('.step-btn.active');
+    if(active) active.scrollIntoView({inline:'center', behavior:'smooth', block:'nearest'});
   }
 
   function stepsGoTo(n){
     cur = Math.max(0, Math.min(total-1, n));
     track.style.transform = 'translateX(-'+cur+'00%)';
     syncHeight();
-    counter.textContent = (cur+1)+' / '+total;
-    prevBtn.disabled = cur===0;
-    nextBtn.disabled = cur===total-1;
-    dotsWrap.querySelectorAll('.step-dot').forEach(function(d,i){
-      d.classList.toggle('active', i===cur);
-    });
+    updateNav();
   }
 
   window.stepsGo = function(dir){ stepsGoTo(cur+dir); };
 
-  // set height on load (wait for images)
   window.addEventListener('load', syncHeight);
-  // also run immediately in case already loaded
   syncHeight();
 
-  // touch/mouse swipe
+  // swipe
   outer.addEventListener('touchstart',function(e){ startX=e.touches[0].clientX; },{ passive:true });
   outer.addEventListener('touchend',function(e){
-    var dx=e.changedTouches[0].clientX - startX;
+    var dx=e.changedTouches[0].clientX-startX;
     if(Math.abs(dx)>40) stepsGo(dx<0?1:-1);
   },{ passive:true });
   outer.addEventListener('mousedown',function(e){ startX=e.clientX; isDrag=true; });
