@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Đăng Ký – VANTIX SNR MASTER</title>
+<title>Hướng Dẫn Thanh Toán – VANTIX SNR MASTER</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -14,117 +14,401 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Nunito',sans-serif;background:var(--dark2);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px 80px;}
+body{font-family:'Nunito',sans-serif;background:var(--dark2);color:var(--text);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse at 15% 10%,rgba(70,130,200,0.12) 0%,transparent 55%),
   radial-gradient(ellipse at 85% 80%,rgba(212,160,23,0.07) 0%,transparent 55%);}
 
-.wrap{width:100%;max-width:520px;position:relative;z-index:1;}
+.wrap{width:100%;max-width:560px;position:relative;z-index:1;}
 
+/* TOP BAR */
 .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
 .brand{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--gold-light);}
 .back-link{color:var(--muted);font-size:.85rem;text-decoration:none;display:flex;align-items:center;gap:6px;}
 .back-link:hover{color:var(--text);}
 
-.steps{display:flex;gap:0;margin-bottom:32px;border-radius:12px;overflow:hidden;border:1px solid var(--card-border);}
-.step{flex:1;padding:12px 8px;text-align:center;font-size:.78rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);background:var(--card-bg);transition:.2s;}
-.step.active{background:rgba(212,160,23,.15);color:var(--gold-light);border-bottom:2px solid var(--gold);}
-.step.done{background:rgba(39,199,106,.08);color:var(--green-glow);}
+/* PAGE HEADER */
+.page-header{text-align:center;margin-bottom:32px;}
+.page-icon{font-size:2.8rem;margin-bottom:10px;}
+.page-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;color:#fff;margin-bottom:8px;}
+.page-sub{color:var(--soft);font-size:.9rem;line-height:1.6;}
 
-.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:20px;padding:32px 28px;margin-bottom:20px;}
-.card-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:6px;}
-.card-sub{color:var(--soft);font-size:.9rem;margin-bottom:24px;}
+/* TAB SWITCHER */
+.tab-bar{display:flex;gap:0;border-radius:14px;overflow:hidden;border:1px solid var(--card-border);margin-bottom:28px;}
+.tab{flex:1;padding:14px 8px;text-align:center;font-size:.88rem;font-weight:800;letter-spacing:.4px;
+  cursor:pointer;transition:.2s;border:none;font-family:'Nunito',sans-serif;color:var(--muted);
+  background:var(--card-bg);}
+.tab.active{background:rgba(212,160,23,.15);color:var(--gold-light);}
+.tab:first-child{border-right:1px solid var(--card-border);}
 
-.plan-amount{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold-light);margin-bottom:4px;}
-.plan-period{color:var(--muted);font-size:.85rem;margin-bottom:24px;}
+/* CARD */
+.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));
+  border:1px solid var(--card-border);border-radius:20px;padding:32px 28px;margin-bottom:20px;}
+.card-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;color:#fff;margin-bottom:6px;}
+.card-sub{color:var(--soft);font-size:.88rem;margin-bottom:24px;line-height:1.6;}
 
-.form-group{margin-bottom:16px;}
-label{display:block;font-size:.82rem;font-weight:700;color:var(--soft);margin-bottom:7px;letter-spacing:.3px;}
-input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--card-border);border-radius:10px;padding:13px 16px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.95rem;outline:none;transition:.2s;}
-input:focus{border-color:rgba(212,160,23,.6);background:rgba(255,255,255,.08);}
-input::placeholder{color:var(--muted);}
+/* STEPS SLIDER */
+.steps-slider-wrap{position:relative;user-select:none;margin-left:-28px;margin-right:-28px;}
+.steps-track-outer{overflow:hidden;border-radius:16px;transition:height .35s cubic-bezier(.4,0,.2,1);}
+.steps-track{display:flex;align-items:flex-start;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform;}
+.step-item{flex:0 0 100%;display:flex;flex-direction:column;gap:0;
+  background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:16px;padding:16px 20px 20px;
+  box-sizing:border-box;}
+.step-header{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
+.step-num{width:36px;height:36px;min-width:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:#0D1F3C;font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+.step-title{font-weight:800;font-size:.98rem;color:#fff;}
+.step-desc{color:var(--soft);font-size:.85rem;line-height:1.65;}
+.step-desc strong{color:var(--text);}
+.step-desc em{color:var(--gold-light);font-style:normal;font-weight:700;}
+/* Slider nav */
+.steps-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;}
+.steps-arrow{background:rgba(255,255,255,.07);border:1px solid var(--card-border);color:var(--gold-light);
+  width:38px;height:38px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:.18s;flex-shrink:0;}
+.steps-arrow:hover:not(:disabled){background:rgba(212,160,23,.18);border-color:var(--gold);}
+.steps-arrow:disabled{opacity:.3;cursor:default;}
+.steps-dots{display:flex;gap:6px;align-items:center;}
+.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:.2s;}
+.step-dot.active{background:var(--gold);transform:scale(1.25);}
+.steps-counter{color:var(--muted);font-size:.8rem;font-weight:700;min-width:40px;text-align:center;}
 
-.btn-primary{width:100%;background:linear-gradient(135deg,#1A8C4E,#27C76A);color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:.5px;padding:15px;border-radius:14px;border:none;font-size:1rem;cursor:pointer;box-shadow:0 8px 22px rgba(39,199,106,.35);transition:.2s;font-family:'Nunito',sans-serif;}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(39,199,106,.5);}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-
-.bank-box{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.25);border-radius:16px;padding:20px;margin-bottom:20px;}
-.bank-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+/* BANK BOX */
+.bank-box{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.25);
+  border-radius:16px;padding:20px;margin:18px 0;}
+.bank-row{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
 .bank-row:last-child{border-bottom:none;}
 .bank-label{color:var(--muted);font-size:.83rem;}
 .bank-value{font-weight:800;color:var(--text);font-size:.95rem;display:flex;align-items:center;gap:8px;}
-.copy-btn{background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.35);color:var(--gold-light);padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s;}
+.copy-btn{background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.35);
+  color:var(--gold-light);padding:3px 10px;border-radius:6px;font-size:.72rem;font-weight:700;
+  cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s;}
 .copy-btn:hover{background:rgba(212,160,23,.25);}
-.ref-highlight{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold-light);letter-spacing:1px;}
+.ref-highlight{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold-light);letter-spacing:1px;}
 
-.qr-wrap{text-align:center;margin-bottom:20px;}
-.qr-wrap img{width:200px;height:200px;border-radius:12px;border:3px solid rgba(212,160,23,.3);display:inline-block;}
+/* QR */
+.qr-wrap{text-align:center;margin:18px 0 8px;}
+.qr-wrap img{width:190px;height:190px;border-radius:12px;border:3px solid rgba(212,160,23,.3);display:inline-block;}
 .qr-caption{color:var(--muted);font-size:.78rem;margin-top:8px;}
 
-.warning-box{background:rgba(255,87,34,.08);border:1px solid rgba(255,87,34,.3);border-radius:12px;padding:14px 18px;font-size:.83rem;color:#FFA07A;line-height:1.6;margin-bottom:20px;}
+/* WARNING */
+.warning-box{background:rgba(255,87,34,.08);border:1px solid rgba(255,87,34,.3);
+  border-radius:12px;padding:14px 18px;font-size:.83rem;color:#FFA07A;line-height:1.6;margin:18px 0;}
 .warning-box strong{color:#FF6B2B;}
 
-.loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px;}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* INFO BOX */
+.info-box{background:rgba(39,199,106,.06);border:1px solid rgba(39,199,106,.22);
+  border-radius:12px;padding:14px 18px;font-size:.83rem;color:var(--green-glow);line-height:1.6;margin-top:18px;}
 
-.hidden{display:none!important;}
+/* COUPON */
+.coupon-wrap{margin:16px 0;}
+.coupon-row{display:flex;gap:8px;}
+.coupon-input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--card-border);
+  border-radius:10px;padding:10px 14px;color:#fff;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;
+  transition:.2s;}
+.coupon-input:focus{border-color:var(--gold);background:rgba(255,255,255,.08);}
+.coupon-input::placeholder{color:var(--muted);}
+.coupon-btn{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0D1F3C;
+  border:none;border-radius:10px;padding:10px 18px;font-weight:900;font-size:.85rem;
+  cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:.15s;}
+.coupon-btn:hover{filter:brightness(1.1);}
+.coupon-msg{font-size:.82rem;margin-top:7px;min-height:18px;font-weight:700;}
+.coupon-msg.success{color:#4ade80;}
+.coupon-msg.error{color:#f87171;}
 
-.whop-note{text-align:center;color:var(--muted);font-size:.78rem;margin-top:12px;}
+/* DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--card-border);}
+.divider span{color:var(--muted);font-size:.78rem;letter-spacing:1px;}
 
-/* ACTIVATION STEPS */
-.act-header{text-align:center;margin-bottom:28px;}
-.act-icon{font-size:3.5rem;margin-bottom:12px;}
-.act-title-main{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin-bottom:8px;}
-.act-subtitle{color:var(--soft);font-size:.9rem;line-height:1.6;}
-.act-steps{display:flex;flex-direction:column;gap:20px;}
-.act-step{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:16px;padding:20px;}
-.act-num{width:36px;height:36px;min-width:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0D1F3C;font-weight:900;font-size:1rem;display:flex;align-items:center;justify-content:center;}
-.act-content{flex:1;}
-.act-step-title{font-weight:800;font-size:1rem;color:#fff;margin-bottom:4px;}
-.act-step-desc{color:var(--soft);font-size:.85rem;line-height:1.6;margin-bottom:12px;}
-.act-link{display:inline-block;padding:10px 20px;border-radius:10px;font-weight:800;font-size:.88rem;text-decoration:none;transition:.2s;}
-.act-link-whop{background:linear-gradient(135deg,#5B21B6,#7C3AED);color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.4);}
-.act-link-whop:hover{transform:translateY(-1px);}
-.act-link-zalo{background:linear-gradient(135deg,#0068FF,#00A3FF);color:#fff;box-shadow:0 4px 14px rgba(0,104,255,.4);}
-.act-link-zalo:hover{transform:translateY(-1px);}
-.zalo-qr{text-align:center;margin-top:14px;}
-.zalo-qr img{width:140px;height:140px;border-radius:10px;border:2px solid rgba(0,104,255,.4);}
-.zalo-qr-cap{color:var(--muted);font-size:.73rem;margin-top:6px;}
-.act-note{text-align:center;margin-top:24px;padding:14px;background:rgba(39,199,106,.07);border:1px solid rgba(39,199,106,.2);border-radius:12px;color:var(--green-glow);font-size:.85rem;line-height:1.6;}
+/* LINK BUTTON */
+.btn-link{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;
+  border-radius:12px;font-weight:800;font-size:.88rem;text-decoration:none;
+  transition:.2s;margin-top:14px;cursor:pointer;border:none;font-family:'Nunito',sans-serif;}
+.btn-visa{background:linear-gradient(135deg,#1a4fa0,#2563EB);color:#fff;
+  box-shadow:0 4px 16px rgba(37,99,235,.4);}
+.btn-visa:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.55);}
+.btn-zalo{background:linear-gradient(135deg,#0068FF,#00A3FF);color:#fff;
+  box-shadow:0 4px 14px rgba(0,104,255,.4);}
+.btn-zalo:hover{transform:translateY(-2px);}
+.btn-full{width:100%;justify-content:center;}
 
-@media(max-width:480px){.card{padding:24px 18px;}.bank-value{font-size:.85rem;}.act-step{padding:16px;}}
+/* AMOUNT BADGE */
+.amount-badge{display:inline-block;background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.35);
+  color:var(--gold-light);font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;
+  padding:10px 24px;border-radius:12px;margin-bottom:6px;}
+.amount-note{color:var(--muted);font-size:.8rem;}
 
-/* ── DISCOUNT MODAL ── */
-.modal-overlay{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;
-  background:rgba(5,10,25,0.85);backdrop-filter:blur(6px);}
-.modal-overlay.hidden{display:none!important;}
-.modal-box{background:linear-gradient(160deg,#0d1f3c,#071428);border:1px solid rgba(212,160,23,.45);border-radius:24px;
-  padding:36px 32px;max-width:440px;width:100%;text-align:center;position:relative;
-  box-shadow:0 0 60px rgba(212,160,23,.18);}
-.modal-badge{display:inline-block;background:linear-gradient(135deg,#D4A017,#F5C842);color:#0d1f3c;
-  font-weight:900;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;
-  border-radius:20px;margin-bottom:16px;}
-.modal-icon{font-size:3rem;margin-bottom:10px;}
-.modal-title{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;color:#fff;margin-bottom:8px;line-height:1.3;}
-.modal-subtitle{color:rgba(232,240,255,.65);font-size:.88rem;margin-bottom:24px;line-height:1.6;}
-.modal-price-box{background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.25);border-radius:16px;
-  padding:20px;margin-bottom:22px;}
-.modal-price-old{color:rgba(232,240,255,.4);font-size:.85rem;text-decoration:line-through;margin-bottom:6px;}
-.modal-price-new{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:900;color:#F5C842;line-height:1;}
-.modal-price-save{display:inline-block;background:rgba(39,199,106,.15);color:#6EE7A0;font-size:.78rem;
-  font-weight:800;padding:3px 10px;border-radius:8px;margin-top:8px;}
-.modal-timer{color:rgba(232,240,255,.55);font-size:.8rem;margin-bottom:22px;}
-.modal-timer span{color:#F5C842;font-weight:900;font-size:.95rem;}
-.btn-accept{width:100%;background:linear-gradient(135deg,#D4A017,#F5C842);color:#0d1f3c;font-weight:900;
-  text-transform:uppercase;letter-spacing:.5px;padding:15px;border-radius:14px;border:none;font-size:1rem;
-  cursor:pointer;box-shadow:0 8px 22px rgba(212,160,23,.4);transition:.2s;font-family:'Nunito',sans-serif;margin-bottom:10px;}
-.btn-accept:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(212,160,23,.6);}
-.btn-skip{width:100%;background:transparent;border:none;color:rgba(232,240,255,.35);font-size:.8rem;
-  cursor:pointer;padding:8px;font-family:'Nunito',sans-serif;transition:.15s;}
-.btn-skip:hover{color:rgba(232,240,255,.6);}
+/* STEP IMAGE */
+.step-img{width:100%;border-radius:10px;border:1px solid var(--card-border);margin-top:12px;display:block;cursor:zoom-in;transition:opacity .15s;}
+.step-img:hover{opacity:.88;}
+
+/* LIGHTBOX */
+#lb{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);align-items:center;justify-content:center;cursor:zoom-out;}
+#lb.open{display:flex;}
+#lb img{max-width:92vw;max-height:92vh;border-radius:12px;box-shadow:0 8px 48px rgba(0,0,0,.7);}
+
+/* PANEL HIDDEN */
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* ZALO CONTACT */
+.zalo-contact{display:flex;align-items:center;gap:16px;background:rgba(0,104,255,.07);
+  border:1px solid rgba(0,104,255,.25);border-radius:14px;padding:18px 20px;margin-top:18px;}
+.zalo-qr-img{width:80px;height:80px;border-radius:8px;border:2px solid rgba(0,104,255,.3);flex-shrink:0;}
+.zalo-info{flex:1;}
+.zalo-name{font-weight:800;color:#fff;font-size:.95rem;margin-bottom:4px;}
+.zalo-desc{color:var(--soft);font-size:.82rem;line-height:1.5;}
+
+/* SPIN TRIGGER BUTTON */
+.spin-trigger-wrap{text-align:center;margin-bottom:28px;}
+.btn-spin-trigger{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;
+  border-radius:50px;font-weight:900;font-size:1rem;cursor:pointer;border:none;
+  font-family:'Nunito',sans-serif;letter-spacing:.3px;
+  background:linear-gradient(135deg,#7C3AED,#A855F7);color:#fff;
+  box-shadow:0 4px 20px rgba(124,58,237,.45);transition:.2s;}
+.btn-spin-trigger:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.6);}
+.btn-spin-trigger .spin-icon{font-size:1.3rem;animation:spinIdle 3s linear infinite;}
+@keyframes spinIdle{to{transform:rotate(360deg);}}
+
+/* ── SPIN WHEEL (gốc từ index.html) ── */
+@keyframes sw-strikein {
+  from { width:0; opacity:0; }
+  to   { width:100%; opacity:1; }
+}
+.sw-strike-line {
+  position:absolute; top:50%; left:0; height:3px;
+  background:linear-gradient(90deg,#c0392b,#e74c3c);
+  width:0; transform:translateY(-50%); pointer-events:none; z-index:5;
+  border-radius:2px; box-shadow:0 0 8px rgba(231,76,60,.7);
+  animation:sw-strikein .55s ease-out forwards;
+}
+.sw-overlay {
+  position:fixed; inset:0; z-index:10000;
+  background:rgba(3,7,18,.93); backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  opacity:0; pointer-events:none; transition:opacity .38s ease;
+}
+.sw-overlay.show { opacity:1; pointer-events:all; }
+.sw-box {
+  background:url('wheel-bg.png') center/cover no-repeat;
+  border:1px solid rgba(212,160,23,.55); border-radius:24px;
+  padding:26px 22px 20px; max-width:390px; width:100%; text-align:center;
+  box-shadow:0 0 80px rgba(212,160,23,.2),0 40px 80px rgba(0,0,0,.9);
+  transform:scale(.88) translateY(24px);
+  transition:transform .42s cubic-bezier(.34,1.56,.64,1);
+  position:relative; overflow:hidden;
+}
+.sw-box::before {
+  content:''; position:absolute; inset:0; border-radius:23px;
+  background:linear-gradient(160deg,rgba(5,10,25,.82) 0%,rgba(2,6,16,.9) 100%);
+  pointer-events:none; z-index:0;
+}
+.sw-box > * { position:relative; z-index:1; }
+.sw-overlay.show .sw-box { transform:scale(1) translateY(0); }
+.sw-badge {
+  display:inline-block; background:linear-gradient(135deg,#D4A017,#F5C842);
+  color:#071428; font-weight:900; font-size:.68rem; letter-spacing:1.5px;
+  text-transform:uppercase; padding:4px 14px; border-radius:20px; margin-bottom:10px;
+}
+.sw-title { font-size:1.2rem; font-weight:900; color:#fff; margin-bottom:3px; font-family:'Nunito',sans-serif; }
+.sw-subtitle { color:rgba(249,249,249,.48); font-size:.77rem; margin-bottom:12px; line-height:1.5; }
+.sw-turns-row { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.sw-turns-label { color:rgba(249,249,249,.45); font-size:.72rem; }
+.sw-dot { width:11px; height:11px; border-radius:50%; background:rgba(212,160,23,.18); border:2px solid rgba(212,160,23,.3); transition:all .3s; }
+.sw-dot.on { background:#F5C842; border-color:#F5C842; box-shadow:0 0 8px rgba(245,200,66,.9); }
+.sw-turns-sep { width:1px; height:14px; background:rgba(255,255,255,.12); margin:0 2px; }
+.sw-reset-timer { font-size:.68rem; color:rgba(249,249,249,.38); font-variant-numeric:tabular-nums; letter-spacing:.3px; white-space:nowrap; }
+.sw-reset-timer.urgent { color:#F5C842; text-shadow:0 0 6px rgba(245,200,66,.5); }
+.sw-wheel-area { position:relative; display:inline-block; margin-bottom:16px; }
+.sw-pointer {
+  position:absolute; top:-2px; left:50%; transform:translateX(-50%); z-index:10;
+  width:0; height:0; border-left:10px solid transparent; border-right:10px solid transparent;
+  border-top:22px solid #F5C842; filter:drop-shadow(0 0 7px rgba(245,200,66,.95));
+}
+#swCanvas {
+  display:block; border-radius:50%;
+  box-shadow:0 0 0 3px rgba(212,160,23,.38),0 0 32px rgba(212,160,23,.14),0 0 70px rgba(0,0,0,.55);
+}
+.sw-spin-btn {
+  width:100%; background:linear-gradient(135deg,#b87a08,#F5C842); color:#071428;
+  font-weight:900; font-size:.92rem; letter-spacing:.5px; text-transform:uppercase;
+  padding:13px; border-radius:12px; border:none; cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  box-shadow:0 6px 20px rgba(212,160,23,.45); transition:transform .2s,box-shadow .2s;
+  margin-bottom:10px;
+}
+.sw-spin-btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 28px rgba(212,160,23,.65); }
+.sw-spin-btn:disabled { opacity:.35; cursor:not-allowed; transform:none; }
+.sw-result {
+  background:rgba(255,255,255,.04); border:1px solid rgba(212,160,23,.2);
+  border-radius:14px; padding:14px; margin-bottom:8px; display:none;
+  animation:sw-popin .38s cubic-bezier(.34,1.56,.64,1);
+}
+.sw-result.show { display:block; }
+@keyframes sw-popin { from{transform:scale(.88);opacity:0} to{transform:scale(1);opacity:1} }
+.sw-res-icon { font-size:1.9rem; line-height:1; margin-bottom:5px; }
+.sw-res-title { font-size:1.05rem; font-weight:900; color:#F5C842; margin-bottom:3px; font-family:'Nunito',sans-serif; }
+.sw-res-desc { font-size:.73rem; color:rgba(249,249,249,.55); margin-bottom:10px; line-height:1.5; }
+.sw-retry-btn {
+  width:100%; background:linear-gradient(135deg,#b87a08,#F5C842); color:#071428;
+  font-weight:900; font-size:.88rem; padding:12px; border-radius:10px;
+  border:none; cursor:pointer; font-family:'Nunito',sans-serif; margin-bottom:10px;
+  box-shadow:0 4px 14px rgba(212,160,23,.4); transition:.2s;
+}
+.sw-retry-btn:hover { transform:translateY(-1px); box-shadow:0 7px 20px rgba(212,160,23,.6); }
+.sw-choices { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+.sw-choice-get {
+  background:linear-gradient(135deg,#b87a08,#F5C842); color:#071428;
+  font-weight:900; font-size:.82rem; padding:12px 8px; border-radius:10px;
+  border:none; cursor:pointer; font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 14px rgba(212,160,23,.4); transition:.2s; text-align:center;
+}
+.sw-choice-get:hover { transform:translateY(-1px); }
+.sw-choice-skip {
+  background:linear-gradient(135deg,#8B0000,#c0392b); color:#fff;
+  font-weight:900; font-size:.82rem; padding:12px 8px; border-radius:10px;
+  border:none; cursor:pointer; font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 14px rgba(192,57,43,.4); transition:.2s; text-align:center;
+}
+.sw-choice-skip:hover { transform:translateY(-1px); }
+.sw-code-reveal { margin-top:2px; animation:sw-popin .3s ease; }
+.sw-code-box {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:rgba(212,160,23,.1); border:1px dashed rgba(212,160,23,.5);
+  border-radius:10px; padding:10px 14px; margin-bottom:8px;
+}
+.sw-code-text { font-family:'Courier New',monospace; font-size:1rem; font-weight:900; color:#F5C842; letter-spacing:2px; }
+.sw-copy-btn {
+  background:rgba(212,160,23,.2); border:1px solid rgba(212,160,23,.4);
+  color:#F5C842; font-size:.7rem; font-weight:700; padding:4px 10px;
+  border-radius:6px; cursor:pointer; font-family:'Nunito',sans-serif; transition:.15s; white-space:nowrap;
+}
+.sw-copy-btn:hover { background:rgba(212,160,23,.35); }
+.sw-copy-btn.copied { background:rgba(39,199,106,.25); border-color:rgba(39,199,106,.5); color:#6EE7A0; }
+.sw-btn-use {
+  display:block; width:100%; background:linear-gradient(135deg,#1A8C4E,#27C76A); color:#fff;
+  font-weight:900; font-size:.85rem; padding:12px; border-radius:10px;
+  text-decoration:none; box-shadow:0 4px 14px rgba(39,199,106,.45); transition:transform .2s;
+  border:none; cursor:pointer; font-family:'Nunito',sans-serif; text-align:center;
+}
+.sw-btn-use:hover { transform:translateY(-1px); color:#fff; }
+.sw-ea-box {
+  background:linear-gradient(135deg,rgba(212,160,23,.12),rgba(90,50,0,.2));
+  border:1px solid rgba(212,160,23,.5); border-radius:12px; padding:14px; margin-top:2px;
+}
+.sw-ea-title { font-size:.68rem; color:rgba(249,249,249,.45); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px; }
+.sw-ea-btn {
+  display:flex; align-items:center; gap:10px;
+  background:rgba(212,160,23,.15); border:1px solid rgba(212,160,23,.4);
+  border-radius:10px; padding:10px 14px; margin-bottom:8px;
+  text-decoration:none; color:#F5C842; font-weight:700; font-size:.82rem; transition:.2s;
+}
+.sw-ea-btn:hover { background:rgba(212,160,23,.28); color:#F5C842; transform:translateX(3px); }
+.sw-ea-btn:last-child { margin-bottom:0; }
+.sw-ea-btn-icon { font-size:1.3rem; flex-shrink:0; }
+.sw-ea-btn-label { text-align:left; }
+.sw-ea-btn-sub { font-size:.68rem; color:rgba(249,249,249,.45); font-weight:400; display:block; margin-top:1px; }
+.sw-close-btn {
+  background:none; border:none; color:rgba(249,249,249,.22); font-size:.72rem; cursor:pointer;
+  padding:6px; display:block; width:100%; font-family:'Nunito',sans-serif; transition:color .2s;
+}
+.sw-close-btn:hover { color:rgba(249,249,249,.55); }
+.sw-wrapper { display:flex; align-items:flex-start; justify-content:center; gap:12px; max-width:530px; width:100%; }
+.sw-share-panel {
+  background:rgba(5,10,25,.9); border:1px solid rgba(212,160,23,.28);
+  border-radius:18px; padding:14px 8px; text-align:center; flex-shrink:0; width:96px;
+  box-shadow:0 0 40px rgba(0,0,0,.7);
+}
+.sw-share-ttl { font-size:.58rem; font-weight:900; color:#F5C842; text-transform:uppercase; letter-spacing:1px; line-height:1.4; margin-bottom:3px; }
+.sw-share-sub { font-size:.54rem; color:rgba(249,249,249,.35); margin-bottom:12px; line-height:1.4; }
+.sw-share-btn {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  width:100%; padding:9px 4px; border-radius:11px; border:none; cursor:pointer;
+  margin-bottom:7px; transition:transform .18s,filter .18s;
+  font-family:'Nunito',sans-serif; position:relative; overflow:hidden;
+}
+.sw-share-btn:last-child { margin-bottom:0; }
+.sw-share-btn:not(.done):hover { transform:scale(1.06); filter:brightness(1.18); }
+.sw-share-btn.done { opacity:.45; cursor:default; }
+.sw-share-icon { font-size:1.25rem; line-height:1; }
+.sw-share-lbl { font-size:.56rem; font-weight:700; color:#fff; }
+.sw-share-st { font-size:.52rem; font-weight:900; color:rgba(255,255,255,.7); background:rgba(0,0,0,.25); border-radius:8px; padding:1px 6px; }
+.sw-share-fb { background:linear-gradient(150deg,#0f5bb5,#1877f2); }
+.sw-share-ms { background:linear-gradient(150deg,#5b1e8a,#a133d4); }
+.sw-share-zl { background:linear-gradient(150deg,#005fd3,#0190f3); }
+.sw-share-divider { border:none; border-top:1px solid rgba(212,160,23,.15); margin:10px 0; }
+.sw-share-note { font-size:.52rem; color:rgba(249,249,249,.28); line-height:1.5; }
+.sw-info-btn {
+  position:absolute; top:8px; right:10px; z-index:10;
+  width:32px; height:32px; border-radius:50%;
+  background:linear-gradient(135deg,#b87a08,#F5C842);
+  border:2px solid rgba(255,255,255,.25);
+  color:#1a0a00; font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 0 0 rgba(245,200,66,.7), 0 3px 10px rgba(0,0,0,.5);
+  animation:sw-info-pulse 2s ease-in-out infinite;
+  transition:transform .18s,filter .18s;
+}
+.sw-info-btn:hover { transform:scale(1.15); filter:brightness(1.15); animation:none; }
+@keyframes sw-info-pulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(245,200,66,.7), 0 3px 10px rgba(0,0,0,.5); }
+  55%      { box-shadow:0 0 0 8px rgba(245,200,66,.0), 0 3px 10px rgba(0,0,0,.5); }
+}
+.sw-prize-panel {
+  position:absolute; inset:0; z-index:20; border-radius:23px;
+  background:linear-gradient(160deg,rgba(4,9,22,.98) 0%,rgba(2,5,14,.99) 100%);
+  padding:18px 16px 16px; overflow-y:auto;
+  transform:translateX(102%); transition:transform .32s cubic-bezier(.4,0,.2,1);
+  scrollbar-width:thin; scrollbar-color:rgba(212,160,23,.2) transparent;
+}
+.sw-prize-panel.show { transform:translateX(0); }
+.sw-prize-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:11px; border-bottom:1px solid rgba(212,160,23,.22); }
+.sw-prize-hdr-title { font-size:1rem; font-weight:900; color:#F5C842; font-family:'Nunito',sans-serif; }
+.sw-prize-close { background:none; border:none; color:rgba(249,249,249,.38); font-size:1.1rem; cursor:pointer; padding:2px 7px; border-radius:6px; transition:.15s; line-height:1; }
+.sw-prize-close:hover { color:#fff; background:rgba(255,255,255,.09); }
+.sw-prize-row { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; margin-bottom:6px; border:1px solid transparent; transition:box-shadow .2s; }
+.sw-prize-row.tier-lose    { background:rgba(107,0,0,.2);  border-color:rgba(155,16,16,.25); }
+.sw-prize-row.tier-extra   { background:rgba(82,51,0,.22); border-color:rgba(212,160,23,.22); }
+.sw-prize-row.tier-low     { background:rgba(7,20,40,.45); border-color:rgba(55,98,174,.14); }
+.sw-prize-row.tier-mid     { background:rgba(7,20,40,.45); border-color:rgba(85,128,204,.18); }
+.sw-prize-row.tier-high    { background:rgba(7,20,40,.45); border-color:rgba(120,160,230,.25); }
+.sw-prize-row.tier-rare    { background:rgba(45,0,77,.28); border-color:rgba(123,0,212,.4); }
+.sw-prize-row.is-won { box-shadow:0 0 0 2px #F5C842, 0 0 14px rgba(245,200,66,.45); border-color:rgba(245,200,66,.6)!important; }
+.sw-prize-icon { font-size:1.3rem; flex-shrink:0; width:26px; text-align:center; }
+.sw-prize-name { flex:1; font-size:.88rem; font-weight:700; color:#eee; line-height:1.3; }
+.sw-prize-stars { font-size:.72rem; color:rgba(249,249,249,.3); margin-left:5px; letter-spacing:1px; }
+.sw-prize-you { font-size:.72rem; color:#F5C842; font-weight:900; margin-left:5px; animation:sw-popin .3s ease; }
+.sw-prize-chip { font-size:.62rem; font-weight:900; letter-spacing:.5px; text-transform:uppercase; padding:3px 8px; border-radius:6px; flex-shrink:0; line-height:1.4; }
+.chip-common  { background:rgba(255,255,255,.07); color:rgba(249,249,249,.38); }
+.chip-medium  { background:rgba(85,128,204,.18);  color:#7aa0d8; }
+.chip-rare    { background:rgba(123,0,212,.28);   color:#d494ff; }
+.chip-jackpot { background:linear-gradient(135deg,rgba(212,160,23,.35),rgba(245,200,66,.2)); color:#F5C842; }
+.sw-prize-note { font-size:.72rem; color:rgba(249,249,249,.28); text-align:center; margin-top:12px; line-height:1.6; }
+
+@media(max-width:520px){
+  .sw-wrapper { flex-direction:column; align-items:center; }
+  .sw-share-panel { display:flex; flex-direction:row; gap:7px; padding:10px 12px; width:100%; max-width:390px; align-items:center; border-radius:14px; }
+  .sw-share-ttl,.sw-share-sub,.sw-share-divider,.sw-share-note { display:none; }
+  .sw-share-btn { flex-direction:row; width:auto; padding:8px 10px; margin-bottom:0; flex:1; justify-content:center; }
+  .sw-share-lbl { display:none; }
+}
+@media(max-width:480px){
+  .card{padding:24px 16px;}
+  .steps-slider-wrap{margin-left:-16px;margin-right:-16px;}
+  .step-item{padding:16px;}
+  .bank-value{font-size:.85rem;}
+  .sw-box{padding:18px 14px 14px;}
+  #swCanvas{width:260px!important;height:260px!important;}
+}
 </style>
 </head>
 <body>
+<div id="lb" onclick="closeLb()"><img id="lb-img" src="" alt="" /></div>
 <div class="wrap">
 
   <div class="top-bar">
@@ -132,348 +416,1008 @@ input::placeholder{color:var(--muted);}
     <a href="index.html#pricing" class="back-link">← Xem lại bảng giá</a>
   </div>
 
-  <!-- STEP BAR (chỉ hiện cho lifetime) -->
-  <div class="steps hidden" id="stepBar">
-    <div class="step active" id="stepA">① Thông tin</div>
-    <div class="step" id="stepB">② Chuyển khoản</div>
-    <div class="step" id="stepC">③ Kích hoạt</div>
+  <div class="page-header">
+    <div class="page-icon">💳</div>
+    <div class="page-title">Hướng Dẫn Thanh Toán</div>
+    <div class="page-sub">Chọn phương thức thanh toán phù hợp với bạn.<br>Sau khi thanh toán, chúng tôi kích hoạt trong <strong style="color:var(--green-glow);">24 giờ</strong>.</div>
   </div>
 
-  <!-- FORM THÔNG TIN (dùng cho cả 3 plan) -->
-  <div id="panelInfo" class="card">
-    <div class="card-title" id="infoTitle">Đăng Ký</div>
-    <div class="card-sub" id="infoSub"></div>
-
-    <div class="plan-amount" id="infoAmount"></div>
-    <div class="plan-period" id="infoPeriod"></div>
-
-    <div class="form-group">
-      <label>Họ và tên *</label>
-      <input type="text" id="inputName" placeholder="Nguyễn Văn A" autocomplete="name" />
-    </div>
-    <div class="form-group">
-      <label>Email *</label>
-      <input type="email" id="inputEmail" placeholder="email@example.com" autocomplete="email" />
-    </div>
-    <div class="form-group">
-      <label>Số điện thoại (để hỗ trợ nhanh hơn)</label>
-      <input type="tel" id="inputPhone" placeholder="0912 345 678" autocomplete="tel" />
-    </div>
-
-    <button class="btn-primary" id="btnContinue" onclick="submitForm()">
-      Tiếp Tục →
-    </button>
-    <p class="whop-note hidden" id="whopNote">Bạn sẽ được chuyển sang trang Whop để hoàn tất thanh toán</p>
-  </div>
-
-  <!-- STEP 2: THANH TOÁN (chỉ lifetime) -->
-  <div id="panelPayment" class="card hidden">
-    <div class="card-title">Chuyển khoản ngân hàng</div>
-    <div class="card-sub">Quét QR hoặc chuyển khoản thủ công</div>
-
-    <div class="qr-wrap">
-      <img id="qrImage" src="" alt="QR Code thanh toán" />
-      <div class="qr-caption">Quét bằng app ngân hàng bất kỳ (VietQR)</div>
-    </div>
-
-    <div class="bank-box">
-      <div class="bank-row">
-        <span class="bank-label">Ngân hàng</span>
-        <span class="bank-value" id="bankName">–</span>
-      </div>
-      <div class="bank-row">
-        <span class="bank-label">Số tài khoản</span>
-        <span class="bank-value">
-          <span id="bankAcc">–</span>
-          <button class="copy-btn" onclick="copyText('bankAcc')">Copy</button>
-        </span>
-      </div>
-      <div class="bank-row">
-        <span class="bank-label">Chủ tài khoản</span>
-        <span class="bank-value" id="bankOwner">–</span>
-      </div>
-      <div class="bank-row">
-        <span class="bank-label">Số tiền</span>
-        <span class="bank-value" style="color:var(--gold-light)" id="bankAmount">–</span>
-      </div>
-      <div class="bank-row">
-        <span class="bank-label">Nội dung CK ⚠️</span>
-        <span class="bank-value">
-          <span class="ref-highlight" id="refCode">–</span>
-          <button class="copy-btn" onclick="copyText('refCode')">Copy</button>
-        </span>
-      </div>
-    </div>
-
-    <div class="warning-box">
-      ⚠️ <strong>Quan trọng:</strong> Nhập đúng nội dung chuyển khoản <strong id="refWarn"></strong> để chúng tôi xác nhận đơn của bạn.
-    </div>
-
-    <button class="btn-primary" onclick="showActivation()" style="background:linear-gradient(135deg,#1e3a6e,#2a5298);">
-      ✅ Tôi Đã Chuyển Khoản → Xem Hướng Dẫn Kích Hoạt
+  <!-- SPIN TRIGGER -->
+  <div class="spin-trigger-wrap">
+    <button class="btn-spin-trigger" onclick="openSpin()">
+      <span class="spin-icon">🎰</span> Vận may của bạn đến đâu?
     </button>
   </div>
 
-  <!-- STEP 3: KÍCH HOẠT (chỉ lifetime) -->
-  <div id="panelActivation" class="card hidden">
-    <div class="act-header">
-      <div class="act-icon">🎉</div>
-      <div class="act-title-main">Cảm ơn bạn đã đăng ký!</div>
-      <div class="act-subtitle">Thực hiện <strong>3 bước đơn giản</strong> dưới đây để kích hoạt quyền truy cập.</div>
+  <!-- SPIN MODAL (gốc từ index.html) -->
+  <div id="swOverlay" class="sw-overlay">
+    <div class="sw-wrapper">
+    <div class="sw-share-panel" id="swSharePanelEl" style="display:none;">
+      <div class="sw-share-ttl">Chia Sẻ<br>Lấy Lượt</div>
+      <div class="sw-share-sub">+1 lượt / nền tảng / ngày</div>
+      <button class="sw-share-btn sw-share-fb" id="swShareBtn_facebook" onclick="swShare('facebook')">
+        <span class="sw-share-icon">📘</span>
+        <span class="sw-share-lbl">Facebook</span>
+        <span class="sw-share-st" id="swShareSt_facebook">+1</span>
+      </button>
+      <button class="sw-share-btn sw-share-ms" id="swShareBtn_messenger" onclick="swShare('messenger')">
+        <span class="sw-share-icon">💬</span>
+        <span class="sw-share-lbl">Messenger</span>
+        <span class="sw-share-st" id="swShareSt_messenger">+1</span>
+      </button>
+      <button class="sw-share-btn sw-share-zl" id="swShareBtn_zalo" onclick="swShare('zalo')">
+        <span class="sw-share-icon">🔵</span>
+        <span class="sw-share-lbl">Zalo</span>
+        <span class="sw-share-st" id="swShareSt_zalo">+1</span>
+      </button>
+      <hr class="sw-share-divider">
+      <div class="sw-share-note">Chia sẻ xong<br>sẽ nhận lượt<br>tự động</div>
     </div>
+    <div class="sw-box">
+      <button class="sw-info-btn" id="swInfoBtn" onclick="swTogglePrize()" title="Xem bảng giải thưởng" style="display:none;">🏆</button>
+      <div class="sw-prize-panel" id="swPrizePanel"></div>
+      <div class="sw-badge">🎡 Vòng Quay May Mắn</div>
+      <div class="sw-title">Quay Để Mở Khóa Ưu Đãi!</div>
+      <div class="sw-subtitle">10 ô bí ẩn đang chờ. <strong style="color:#F5C842;">Bạn sẽ mở ra được gì?</strong></div>
+      <div class="sw-turns-row">
+        <span class="sw-turns-label">Lượt hôm nay:</span>
+        <div style="display:flex;gap:5px;">
+          <div class="sw-dot on" id="swDot0"></div>
+          <div class="sw-dot on" id="swDot1"></div>
+          <div class="sw-dot on" id="swDot2"></div>
+        </div>
+        <div class="sw-turns-sep"></div>
+        <span class="sw-reset-timer" id="swResetTimer">🕐 --:--:--</span>
+      </div>
+      <div class="sw-wheel-area">
+        <div class="sw-pointer"></div>
+        <canvas id="swCanvas" width="300" height="300"></canvas>
+      </div>
+      <button class="sw-spin-btn" id="swSpinBtn" onclick="swSpin()">🎯 QUAY NGAY</button>
+      <div class="sw-result" id="swResult">
+        <div class="sw-res-icon" id="swResIcon">🎉</div>
+        <div class="sw-res-title" id="swResTitle"></div>
+        <div class="sw-res-desc" id="swResDesc"></div>
+        <button class="sw-retry-btn" id="swRetryBtn" onclick="swRetry()" style="display:none;">🎯 Thử Lại Ngay</button>
+        <div class="sw-choices" id="swChoices" style="display:none;">
+          <button class="sw-choice-get" onclick="swRevealCode()">📋 Lấy Mã</button>
+          <button class="sw-choice-skip" id="swChoiceSkip" onclick="swKeepSpinning()">🎡 Tiếp Tục</button>
+        </div>
+        <div class="sw-ea-box" id="swEaBox" style="display:none;">
+          <div class="sw-ea-title">🔓 Tải ngay — miễn phí dùng thử 3 tháng</div>
+          <a class="sw-ea-btn" id="swEaLink1" href="#" target="_blank" rel="noopener">
+            <span class="sw-ea-btn-icon">🤖</span>
+            <span class="sw-ea-btn-label">EA TIMING<span class="sw-ea-btn-sub">Bot giao dịch tự động 24/7</span></span>
+          </a>
+          <a class="sw-ea-btn" id="swEaLink2" href="#" target="_blank" rel="noopener">
+            <span class="sw-ea-btn-icon">📋</span>
+            <span class="sw-ea-btn-label">Hướng Dẫn Thiết Lập Đầu Vào<span class="sw-ea-btn-sub">Cài đặt và cấu hình EA</span></span>
+          </a>
+        </div>
+        <div class="sw-code-reveal" id="swCodeReveal" style="display:none;">
+          <div class="sw-code-box">
+            <span class="sw-code-text" id="swCodeText"></span>
+            <button class="sw-copy-btn" id="swCopyBtn" onclick="swCopyCode()">📋 Copy</button>
+          </div>
+          <a href="#" id="swBtnUse" class="sw-btn-use">✅ Đăng Ký Với Ưu Đãi Này</a>
+        </div>
+      </div>
+      <button class="sw-close-btn" onclick="swClose()">Đóng lại</button>
+    </div>
+    </div>
+  </div>
 
-    <div class="act-steps">
-      <div class="act-step">
-        <div class="act-num">1</div>
-        <div class="act-content">
-          <div class="act-step-title">Tạo tài khoản Whop miễn phí</div>
-          <div class="act-step-desc">Đây là nền tảng để bạn truy cập khóa học và cộng đồng Discord VIP.</div>
-          <a href="https://whop.com/discord-1929/hanh-d-ng-gia-free?a=testboss8e" target="_blank" class="act-link act-link-whop">→ Tạo Tài Khoản Whop Ngay</a>
+  <!-- TAB SWITCHER -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('visa')">💳 Thanh Toán Tự Động — VISA / Quốc Tế</button>
+    <button class="tab" onclick="switchTab('bank')">🏦 Chuyển Khoản Ngân Hàng</button>
+  </div>
+
+  <!-- ════════════════════════════════════
+       PANEL 1: VISA
+  ════════════════════════════════════ -->
+  <div id="panel-visa" class="panel active">
+    <div class="card">
+      <div class="card-title">Thanh toán tự động qua thẻ VISA / Mastercard</div>
+      <div class="card-sub">Làm đúng theo <strong style="color:var(--gold-light);">9 bước</strong> dưới đây — từ thanh toán đến học bài đầu tiên.</div>
+
+      <div style="text-align:center;margin-bottom:24px;">
+        <div class="amount-badge" id="visaAmount">7.898.000đ</div>
+        <div class="amount-note">thanh toán 1 lần — truy cập vĩnh viễn</div>
+      </div>
+
+      <div class="steps-slider-wrap" id="stepsSlider">
+        <div class="steps-nav">
+          <button class="steps-arrow" id="stepsPrev" onclick="stepsGo(-1)" disabled>&#8592;</button>
+          <div class="steps-dots" id="stepsDots"></div>
+          <span class="steps-counter" id="stepsCounter">1 / 9</span>
+          <button class="steps-arrow" id="stepsNext" onclick="stepsGo(1)">&#8594;</button>
+        </div>
+        <div class="steps-track-outer">
+          <div class="steps-track" id="stepsTrack">
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">1</div>
+                <div class="step-title">Bấm "Buy now" trên trang Whop</div>
+              </div>
+              <img src="steps/01.png" alt="Bước 1" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">2</div>
+                <div class="step-title">Điền thông tin thanh toán</div>
+              </div>
+              <img src="steps/01 (1).png" alt="Bước 2" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">3</div>
+                <div class="step-title">Kiểm tra email — bấm vào xác nhận</div>
+              </div>
+              <img src="steps/01 (2).png" alt="Bước 3" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">4</div>
+                <div class="step-title">Đăng nhập vào Whop</div>
+              </div>
+              <img src="steps/01 (3).png" alt="Bước 4" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">5</div>
+                <div class="step-title">Nhập email để đăng nhập</div>
+              </div>
+              <img src="steps/01 (4).png" alt="Bước 5" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">6</div>
+                <div class="step-title">Vào cộng đồng GTVăn - Văn Thành GT</div>
+              </div>
+              <img src="steps/01 (5).png" alt="Bước 6" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">7</div>
+                <div class="step-title">Khám phá các mục bên trong</div>
+              </div>
+              <img src="steps/01 (6).png" alt="Bước 7" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">8</div>
+                <div class="step-title">Bắt đầu học — theo đúng thứ tự</div>
+              </div>
+              <img src="steps/01 (7).png" alt="Bước 8" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+            <div class="step-item">
+              <div class="step-header">
+                <div class="step-num">9</div>
+                <div class="step-title">Xem video + tải tài liệu đính kèm</div>
+              </div>
+              <img src="steps/01 (8).png" alt="Bước 9" class="step-img" loading="lazy" onclick="openLb(this)" />
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <a href="https://whop.com/discord-1929/discord-membership-52/" target="_blank"
+         class="btn-link btn-full" style="margin-top:20px;padding-top:20px;padding-bottom:20px;
+         background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 20px rgba(34,197,94,.35);color:#fff;font-size:1.05rem;">
+        🌐 Bấm Vào Đây Để Bắt Đầu →
+      </a>
+
+      <div class="zalo-contact" style="margin-top:18px;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://zalo.me/0847265886&bgcolor=071428&color=E8F0FF&margin=6"
+             alt="Zalo QR" class="zalo-qr-img" />
+        <div class="zalo-info">
+          <div class="zalo-name">📱 Cần hỗ trợ?</div>
+          <div class="zalo-desc">Nhắn Zalo <strong style="color:#fff;">0847 265 886</strong> — mô tả bước đang gặp vấn đề, admin hỗ trợ ngay.</div>
+          <a href="https://zalo.me/0847265886" target="_blank" class="btn-link btn-zalo" style="margin-top:10px;padding:8px 16px;font-size:.82rem;">
+            💬 Nhắn Zalo Ngay
+          </a>
         </div>
       </div>
-      <div class="act-step">
-        <div class="act-num">2</div>
-        <div class="act-content">
-          <div class="act-step-title">Chụp màn hình xác nhận chuyển khoản</div>
-          <div class="act-step-desc">Mở app ngân hàng → vào lịch sử giao dịch → chụp ảnh màn hình cho thấy đã chuyển thành công (có mã nội dung <strong id="refInGuide" style="color:var(--gold-light)"></strong>).</div>
+
+      <div class="info-box" style="margin-top:18px;font-size:.8rem;line-height:1;">
+        <div style="font-weight:800;margin-bottom:10px;">Tóm tắt 9 bước:</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div>1. Bấm "Buy now" trên Whop</div>
+          <div>2. Điền thông tin thẻ thanh toán</div>
+          <div>3. Kiểm tra email → xác nhận</div>
+          <div>4. Đăng nhập vào Whop</div>
+          <div>5. Nhập email để đăng nhập</div>
+          <div>6. Vào cộng đồng GTVăn - Văn Thành GT</div>
+          <div>7. Khám phá các mục bên trong</div>
+          <div>8. Bắt đầu học — theo đúng thứ tự</div>
+          <div>9. Xem video + tải tài liệu đính kèm</div>
         </div>
       </div>
-      <div class="act-step">
-        <div class="act-num">3</div>
-        <div class="act-content">
-          <div class="act-step-title">Gửi thông tin qua Zalo để kích hoạt</div>
-          <div class="act-step-desc">Gửi: <strong>Tên + Email + ảnh chuyển khoản</strong>. Chúng tôi kích hoạt trong vòng <strong style="color:var(--green-glow);">24 giờ</strong>.</div>
-          <a href="https://zalo.me/0847265886" target="_blank" class="act-link act-link-zalo">📱 Nhắn Zalo Ngay</a>
-          <div class="zalo-qr">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://zalo.me/0847265886&bgcolor=071428&color=E8F0FF&margin=10" alt="Zalo QR" />
-            <div class="zalo-qr-cap">Hoặc quét QR bằng ứng dụng Zalo</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       PANEL 2: CHUYỂN KHOẢN
+  ════════════════════════════════════ -->
+  <div id="panel-bank" class="panel">
+    <div class="card">
+      <div class="card-title">Chuyển khoản ngân hàng</div>
+      <div class="card-sub">Quét mã QR hoặc chuyển khoản thủ công. Admin xác nhận và kích hoạt trong 24 giờ.</div>
+
+      <div style="text-align:center;margin-bottom:8px;">
+        <div class="amount-badge" id="bankAmountDisplay">7.898.000đ</div>
+        <div class="amount-note">thanh toán 1 lần — truy cập vĩnh viễn</div>
+      </div>
+
+      <div class="coupon-wrap">
+        <div class="coupon-row">
+          <input type="text" id="bankCoupon" class="coupon-input" placeholder="Nhập mã giảm giá (nếu có)..." />
+          <button class="coupon-btn" onclick="applyBankCoupon()">Áp dụng</button>
+        </div>
+        <div class="coupon-msg" id="bankCouponMsg"></div>
+      </div>
+
+      <div class="qr-wrap">
+        <img id="bankQrImg"
+             src="https://qr.sepay.vn/img?acc=5310986313&bank=BIDV&amount=7898000&des=VANTIX&template=compact&download=false"
+             alt="QR chuyển khoản" />
+        <div class="qr-caption">Quét bằng app ngân hàng bất kỳ (VietQR)</div>
+      </div>
+
+      <div class="bank-box">
+        <div class="bank-row">
+          <span class="bank-label">Ngân hàng</span>
+          <span class="bank-value">BIDV</span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Số tài khoản</span>
+          <span class="bank-value">
+            <span id="bankAcc">5310986313</span>
+            <button class="copy-btn" onclick="copyText('bankAcc')">Copy</button>
+          </span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Chủ tài khoản</span>
+          <span class="bank-value">NGUYEN VAN THANH</span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Số tiền</span>
+          <span class="bank-value" style="color:var(--gold-light);" id="bankAmountRow">7.898.000đ</span>
+        </div>
+        <div class="bank-row">
+          <span class="bank-label">Nội dung CK ⚠️</span>
+          <span class="bank-value">
+            <span class="ref-highlight" id="refCode">VANTIX</span>
+            <button class="copy-btn" onclick="copyText('refCode')">Copy</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        ⚠️ <strong>Quan trọng:</strong> Nhập đúng nội dung chuyển khoản <strong>VANTIX</strong> để chúng tôi xác nhận đơn của bạn. Sai nội dung sẽ mất thêm thời gian xử lý.
+      </div>
+
+      <div class="divider"><span>SAU KHI CHUYỂN KHOẢN</span></div>
+
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-header">
+            <div class="step-num">1</div>
+            <div class="step-title">Chụp lại ảnh màn hình thanh toán</div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <div class="step-title">Bấm vào Zalo để gửi ảnh xác nhận</div>
+          </div>
+          <a href="https://zalo.me/0847265886" target="_blank" class="btn-link btn-zalo" style="margin-top:12px;padding:8px 16px;font-size:.82rem;display:inline-flex;align-items:center;gap:8px;">
+            💬 Nhắn Zalo Ngay
+          </a>
+        </div>
+        <div class="step-item">
+          <div class="step-header">
+            <div class="step-num">3</div>
+            <div class="step-title">Tạo tài khoản Whop</div>
+          </div>
+          <img src="steps/000.png" alt="Bước 3 - Tạo tài khoản Whop" class="step-img" loading="lazy" onclick="openLb(this)" />
+          <a href="https://whop.com/checkout/plan_crTaD2bpy5cpH" target="_blank" class="btn-link btn-visa" style="margin-top:12px;padding:10px 20px;font-size:.88rem;display:inline-flex;align-items:center;gap:8px;">
+            🌐 Tạo tài khoản Whop →
+          </a>
+        </div>
+        <div class="step-item">
+          <div class="step-header">
+            <div class="step-num">4</div>
+            <div class="step-title">Xác nhận xong mình sẽ nhắn tin bạn kiểm tra Email</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="act-note">
-      ✅ Sau khi nhận được thông tin, chúng tôi sẽ kích hoạt tài khoản Whop của bạn — bạn có ngay quyền truy cập <strong>Discord VIP</strong> và toàn bộ <strong>khóa học</strong>.
+      <div class="zalo-contact" style="margin-top:24px;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://zalo.me/0847265886&bgcolor=071428&color=E8F0FF&margin=6"
+             alt="Zalo QR" class="zalo-qr-img" />
+        <div class="zalo-info">
+          <div class="zalo-name">📱 Gửi xác nhận thanh toán</div>
+          <div class="zalo-desc">Zalo <strong style="color:#fff;">0847 265 886</strong> — gửi ảnh chuyển khoản + tên + email để kích hoạt.</div>
+          <a href="https://zalo.me/0847265886" target="_blank" class="btn-link btn-zalo" style="margin-top:10px;padding:8px 16px;font-size:.82rem;">
+            💬 Nhắn Zalo Ngay
+          </a>
+        </div>
+      </div>
+
+      <div class="info-box">
+        📌 Sau khi chuyển khoản bạn phải gửi:<br>
+        <strong>1.</strong> Email bạn đã tạo<br>
+        <strong>2.</strong> Bill chuyển khoản
+      </div>
     </div>
   </div>
 
-</div>
-
-<!-- DISCOUNT MODAL -->
-<div class="modal-overlay hidden" id="discountModal">
-  <div class="modal-box">
-    <div class="modal-badge">🔒 Ưu Đãi Giới Hạn</div>
-    <div class="modal-icon">🎁</div>
-    <div class="modal-title">Khoan đã! Chúng tôi có quà cho bạn</div>
-    <div class="modal-subtitle">Bạn đang được tặng thêm <strong style="color:#F5C842;">giảm 12%</strong> — chỉ dành cho lần đăng ký này. Ưu đãi hết sau:</div>
-    <div class="modal-timer">⏳ <span id="countdownTimer">05:00</span></div>
-    <div class="modal-price-box">
-      <div class="modal-price-old" id="modalPriceOld"></div>
-      <div class="modal-price-new" id="modalPriceNew"></div>
-      <div class="modal-price-save" id="modalPriceSave"></div>
-    </div>
-    <button class="btn-accept" onclick="acceptDiscount()">✅ Nhận Ngay Ưu Đãi 12% →</button>
-    <button class="btn-skip" onclick="skipDiscount()">Không cảm ơn, tôi muốn trả giá gốc</button>
-  </div>
 </div>
 
 <script>
-// Bảng mã giảm giá từ vòng quay may mắn
-const DISCOUNT_CODES = {
-  'XAU-LUCKY': 5, 'SNR-08': 8, 'SUPPLY10': 10, 'ACTION12': 12,
-  'BULL-VX': 15, 'WHALE-18': 18, 'PUMP-VX': 20, 'MOON-25': 25, 'DIAMOND30': 30,
-};
+/* ── SPIN WHEEL (gốc từ index.html) ── */
+function openSpin(){ swOpen('checkout.html'); }
 
-const PLANS = {
-  full:         { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
-  // Giữ lại cho tương thích link cũ
-  month:        { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
-  'khoa-year':  { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
-  'khoa-vinh':  { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
-  year:         { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
-  lifetime:     { title: 'VANTIX SNR MASTER — Trọn Bộ 🏆', amount: '7.898.000đ', period: 'thanh toán 1 lần, truy cập vĩnh viễn', whopUrl: null, bankAmount: 7898000, discountAmount: null, discountDisplay: null },
-};
+(function() {
+  var EA_LINKS = {
+    ea:    'https://drive.google.com/file/d/1BDdbYSG7eRTBjJwdhAv3nu9WQ_znUXvQ/view?usp=drive_link',
+    setup: 'https://drive.google.com/file/d/10l9sVajsyL3TqQ9lQRIHzDfuqFlY9uUX/view?usp=drive_link',
+  };
 
-const params = new URLSearchParams(window.location.search);
-const plan = params.get('plan') || 'full';
-const p = PLANS[plan] || PLANS.full;
-const isBankTransfer = !p.whopUrl;
+  var SEGS = [
+    { label:'MẤT\nLƯỢT', show:true,  ca:'#6B0000', cb:'#9B1010', tc:'#FFAAAA', type:'lose',     val:0,  code:''          },
+    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:5,  code:'XAU-LUCKY' },
+    { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:8,  code:'SNR-08'    },
+    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:10, code:'SUPPLY10'  },
+    { label:'THÊM\nLƯỢT',show:true,  ca:'#5C3A00', cb:'#7a5200', tc:'#FFD700', type:'extra',    val:1,  code:''          },
+    { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:12, code:'ACTION12'  },
+    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:18, code:'BULL-VX'   },
+    { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'lose',     val:0,  code:''          },
+    { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:20, code:'PUMP-VX'   },
+    { label:'?',          show:false, ca:'#071428', cb:'#0d2040', tc:'#5580cc', type:'discount', val:25, code:'MOON-25'   },
+    { label:'?',          show:false, ca:'#09192e', cb:'#112244', tc:'#4d77bb', type:'discount', val:30, code:'DIAMOND30' },
+    { label:'?',          show:false, ca:'#2D004D', cb:'#7B00D4', tc:'#EEB4FF', type:'ea_trial', val:0,  code:''          },
+  ];
+  var WEIGHTS = [7, 12, 12, 11, 10, 11, 10, 3, 5, 4, 3, 3];
 
-// Áp dụng mã giảm giá từ vòng quay (nếu có)
-const urlCode     = (params.get('code') || '').toUpperCase();
-const urlDiscount = parseInt(params.get('discount') || '0', 10);
-let appliedPct    = 0;
-let appliedCode   = '';
-if (urlCode && DISCOUNT_CODES[urlCode]) {
-  appliedPct  = DISCOUNT_CODES[urlCode];
-  appliedCode = urlCode;
-} else if (urlDiscount > 0 && urlDiscount <= 30) {
-  appliedPct = urlDiscount;
-}
-const discountedAmount = appliedPct > 0
-  ? Math.round(p.bankAmount * (1 - appliedPct / 100) / 1000) * 1000
-  : p.bankAmount;
-const displayAmount = appliedPct > 0
-  ? discountedAmount.toLocaleString('vi-VN') + 'đ'
-  : p.amount;
+  var currentRot = 0;
+  var isSpinning = false;
+  var pendingUrl = 'checkout.html';
+  var _wonSegIdx = -1;
 
-document.getElementById('infoTitle').textContent  = p.title;
-document.getElementById('infoSub').textContent    = 'Thanh toán 1 lần qua chuyển khoản ngân hàng';
-document.getElementById('infoAmount').textContent = displayAmount;
-document.getElementById('infoPeriod').textContent = appliedPct > 0
-  ? '🎉 Giảm ' + appliedPct + '% — Mã: ' + (appliedCode || 'WHEEL') + ' | ' + p.period
-  : p.period;
-document.getElementById('btnContinue').textContent = 'Tiếp Tục → Xem Thông Tin Chuyển Khoản';
-document.getElementById('stepBar').classList.remove('hidden');
-
-// Hiển thị banner mã giảm giá nếu có
-if (appliedPct > 0) {
-  const banner = document.createElement('div');
-  banner.style.cssText = 'background:linear-gradient(135deg,rgba(212,160,23,.15),rgba(212,160,23,.08));border:1px solid rgba(212,160,23,.4);border-radius:12px;padding:12px 16px;margin-bottom:16px;text-align:center;';
-  banner.innerHTML = '<div style="font-size:.72rem;color:rgba(232,240,255,.5);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Ưu đãi vòng quay đang áp dụng</div>'
-    + '<div style="font-size:1.1rem;font-weight:900;color:#F5C842;">GIẢM ' + appliedPct + '%'
-    + (appliedCode ? ' &nbsp;·&nbsp; Mã: <span style=\"font-family:\'Courier New\',monospace;letter-spacing:2px;\">' + appliedCode + '</span>' : '') + '</div>'
-    + '<div style="font-size:.78rem;color:rgba(232,240,255,.5);margin-top:4px;">Giá gốc: ' + p.amount + ' → <strong style="color:#F5C842;">' + displayAmount + '</strong></div>';
-  const panelInfo = document.getElementById('panelInfo');
-  panelInfo.insertBefore(banner, panelInfo.querySelector('.form-group'));
-}
-
-const BANK = {
-  name:   'BIDV',
-  acc:    '5310986313',
-  owner:  'NGUYEN VAN THANH',
-  amount: discountedAmount,
-};
-
-function genRef() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = 'VNX';
-  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  return code;
-}
-
-let _pendingName = '', _pendingEmail = '', _pendingPhone = '';
-let _discountApplied = false;
-let _countdownInterval = null;
-
-function submitForm() {
-  const name  = document.getElementById('inputName').value.trim();
-  const email = document.getElementById('inputEmail').value.trim();
-  const phone = document.getElementById('inputPhone').value.trim();
-
-  if (!name)  { alert('Vui lòng nhập họ tên.'); return; }
-  if (!email || !email.includes('@')) { alert('Vui lòng nhập email hợp lệ.'); return; }
-
-  _pendingName = name; _pendingEmail = email; _pendingPhone = phone;
-
-  // Hiển thị modal ưu đãi nếu chưa áp dụng
-  if (!_discountApplied) {
-    showDiscountModal();
-    return;
+  function getRevealLabel(s) {
+    if (s.type === 'lose')     return 'MẤT\nLƯỢT';
+    if (s.type === 'extra')    return 'THÊM\nLƯỢT';
+    if (s.type === 'ea_trial') return 'JACK\nPOT';
+    if (s.type === 'discount') return 'GIẢM\n' + s.val + '%';
+    return s.label;
   }
 
-  proceedCheckout();
-}
+  function getTurns() {
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      return d.date === new Date().toDateString() ? Math.max(0, d.turns | 0) : 3;
+    } catch(e) { return 3; }
+  }
+  function setTurns(n) {
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      var today = new Date().toDateString();
+      d.date = today; d.turns = n;
+      if (d.wonDate !== today) { delete d.wonCode; delete d.wonVal; delete d.wonDate; }
+      localStorage.setItem('swData', JSON.stringify(d));
+    } catch(e) {}
+  }
+  function addExtraTurns(n) { var t = getTurns() + n; setTurns(t); return t; }
+  function saveWonDiscount(code, val) {
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      d.wonCode = code; d.wonVal = val; d.wonDate = new Date().toDateString();
+      localStorage.setItem('swData', JSON.stringify(d));
+    } catch(e) {}
+  }
+  function getSavedDiscount() {
+    try {
+      var d = JSON.parse(localStorage.getItem('swData') || '{}');
+      if (d.wonDate === new Date().toDateString() && d.wonCode) return { code: d.wonCode, val: d.wonVal };
+    } catch(e) {}
+    return null;
+  }
 
-function showDiscountModal() {
-  const modal = document.getElementById('discountModal');
-  document.getElementById('modalPriceOld').textContent = 'Giá gốc: ' + p.amount;
-  document.getElementById('modalPriceNew').textContent = p.discountDisplay || p.amount;
-  document.getElementById('modalPriceSave').textContent = '🎉 Bạn tiết kiệm 12% — chỉ hôm nay!';
-  modal.classList.remove('hidden');
-  startCountdown(5 * 60);
-}
-
-function startCountdown(seconds) {
-  clearInterval(_countdownInterval);
-  const el = document.getElementById('countdownTimer');
-  _countdownInterval = setInterval(() => {
-    if (seconds <= 0) {
-      clearInterval(_countdownInterval);
-      skipDiscount();
-      return;
+  function updateDots(n) {
+    var show = Math.min(n, 3);
+    for (var i = 0; i < 3; i++) {
+      var d = document.getElementById('swDot' + i);
+      if (d) d.classList.toggle('on', i < show);
     }
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    el.textContent = m + ':' + s;
-    seconds--;
-  }, 1000);
-}
-
-function acceptDiscount() {
-  clearInterval(_countdownInterval);
-  _discountApplied = true;
-  // Cập nhật giá hiển thị nếu có discountAmount
-  if (p.discountAmount) {
-    BANK.amount = p.discountAmount;
-    document.getElementById('infoAmount').textContent = p.discountDisplay;
-    document.getElementById('bankAmount').textContent = p.discountDisplay;
-  }
-  document.getElementById('discountModal').classList.add('hidden');
-  proceedCheckout();
-}
-
-function skipDiscount() {
-  clearInterval(_countdownInterval);
-  document.getElementById('discountModal').classList.add('hidden');
-  _discountApplied = true; // không hiện lại
-  proceedCheckout();
-}
-
-function proceedCheckout() {
-  const btn = document.getElementById('btnContinue');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loading-spinner"></span>Đang xử lý...';
-
-  fetch('/.netlify/functions/save-customer', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: _pendingName, email: _pendingEmail, phone: _pendingPhone, plan }),
-  }).catch(() => {});
-
-  if (!isBankTransfer) {
-    window.location.href = p.whopUrl + '?prefill_email=' + encodeURIComponent(_pendingEmail);
-    return;
   }
 
-  const ref = genRef();
-  const qr  = `https://qr.sepay.vn/img?acc=${BANK.acc}&bank=${BANK.name}&amount=${BANK.amount}&des=${ref}&template=compact&download=false`;
-  showPaymentPanel({ ref_code: ref, bank_name: BANK.name, account_number: BANK.acc, account_name: BANK.owner, qr_url: qr });
+  function drawWheel() {
+    var canvas = document.getElementById('swCanvas');
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, cx = W / 2, cy = W / 2, R = cx - 5;
+    var n = SEGS.length;
+    var step = (2 * Math.PI) / n;
+    var base = -Math.PI / 2 - step / 2;
+    ctx.clearRect(0, 0, W, W);
+    ctx.beginPath();
+    ctx.arc(cx, cy, R + 4, 0, 2 * Math.PI);
+    var ringGrad = ctx.createRadialGradient(cx, cy, R - 2, cx, cy, R + 4);
+    ringGrad.addColorStop(0, 'rgba(212,160,23,.0)');
+    ringGrad.addColorStop(1, 'rgba(212,160,23,.25)');
+    ctx.fillStyle = ringGrad;
+    ctx.fill();
+    for (var i = 0; i < n; i++) {
+      var s  = SEGS[i];
+      var a0 = base + i * step;
+      var a1 = base + (i + 1) * step;
+      var am = (a0 + a1) / 2;
+      var gx0 = cx + R * .18 * Math.cos(am), gy0 = cy + R * .18 * Math.sin(am);
+      var gx1 = cx + R * Math.cos(am),        gy1 = cy + R * Math.sin(am);
+      var g   = ctx.createLinearGradient(gx0, gy0, gx1, gy1);
+      g.addColorStop(0, s.ca); g.addColorStop(1, s.cb);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, R, a0, a1);
+      ctx.closePath();
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.strokeStyle = s.type === 'ea_trial' ? 'rgba(180,80,255,.9)' : 'rgba(212,160,23,.38)';
+      ctx.lineWidth = s.type === 'ea_trial' ? 2.5 : 1.5;
+      ctx.stroke();
+      var tr = R * .67, tx = cx + tr * Math.cos(am), ty = cy + tr * Math.sin(am);
+      ctx.save();
+      ctx.translate(tx, ty);
+      ctx.rotate(am + Math.PI / 2);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = s.tc;
+      var isWon = (i === _wonSegIdx);
+      if (s.show || isWon) {
+        var revLabel = isWon ? getRevealLabel(s) : s.label;
+        var fontSize = isWon && s.type !== 'lose' && s.type !== 'extra' ? '8px' : '9px';
+        ctx.font = '700 ' + fontSize + ' Nunito,sans-serif';
+        if (isWon) { ctx.shadowColor = '#F5C842'; ctx.shadowBlur = 8; }
+        var lines = revLabel.split('\n'), lh = 11;
+        for (var li = 0; li < lines.length; li++)
+          ctx.fillText(lines[li], 0, (li - (lines.length - 1) / 2) * lh);
+        ctx.shadowBlur = 0;
+      } else if (s.type === 'ea_trial') {
+        ctx.shadowColor = '#CC44FF'; ctx.shadowBlur = 12;
+        ctx.font = '900 22px Nunito,sans-serif';
+        ctx.fillText('?', 0, 1); ctx.shadowBlur = 0;
+      } else {
+        ctx.font = '900 20px Nunito,sans-serif';
+        ctx.fillText('?', 0, 1);
+      }
+      ctx.restore();
+    }
+    ctx.beginPath();
+    ctx.arc(cx, cy, 19, 0, 2 * Math.PI);
+    var cg = ctx.createRadialGradient(cx - 4, cy - 4, 1, cx, cy, 19);
+    cg.addColorStop(0, '#F5C842'); cg.addColorStop(1, '#b87a08');
+    ctx.fillStyle = cg; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = '12px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#071428'; ctx.fillText('★', cx, cy + 1);
+  }
+
+  function pickSeg() {
+    var total = WEIGHTS.reduce(function(a,b){return a+b;}, 0);
+    var r = Math.random() * total;
+    for (var i = 0; i < WEIGHTS.length; i++) { r -= WEIGHTS[i]; if (r <= 0) return i; }
+    return 0;
+  }
+
+  window.swSpin = function() {
+    if (isSpinning) return;
+    var turns = getTurns();
+    if (turns <= 0) { alert('Hết lượt quay hôm nay! Quay lại ngày mai nhé 😊'); return; }
+    turns--; setTurns(turns); updateDots(turns);
+    isSpinning = true;
+    document.getElementById('swSpinBtn').disabled = true;
+    document.getElementById('swResult').classList.remove('show');
+    var winIdx  = pickSeg();
+    var segDeg  = 360 / SEGS.length;
+    var winMod  = (360 - winIdx * segDeg) % 360;
+    var curMod  = currentRot % 360;
+    var delta   = (winMod - curMod + 360) % 360;
+    if (delta < 30) delta += 360;
+    var target  = currentRot + 5 * 360 + delta;
+    var canvas = document.getElementById('swCanvas');
+    canvas.style.transition = 'none';
+    canvas.style.transform  = 'rotate(' + currentRot + 'deg)';
+    canvas.getBoundingClientRect();
+    canvas.style.transition = 'transform 4.8s cubic-bezier(.2,.82,.3,1)';
+    canvas.style.transform  = 'rotate(' + target + 'deg)';
+    setTimeout(function() {
+      canvas.style.transition = 'none';
+      currentRot = target;
+      isSpinning = false;
+      _wonSegIdx = winIdx;
+      drawWheel();
+      showResult(winIdx, turns);
+    }, 4900);
+  };
+
+  var _lastSeg = null;
+
+  function showResult(idx, remainTurns) {
+    var seg = SEGS[idx];
+    _lastSeg = seg;
+    document.getElementById('swResult').classList.add('show');
+    var icon    = document.getElementById('swResIcon');
+    var tit     = document.getElementById('swResTitle');
+    var desc    = document.getElementById('swResDesc');
+    var choices = document.getElementById('swChoices');
+    var reveal  = document.getElementById('swCodeReveal');
+    var skipBtn = document.getElementById('swChoiceSkip');
+    reveal.style.display  = 'none';
+    choices.style.display = 'none';
+    document.getElementById('swEaBox').style.display = 'none';
+    document.getElementById('swRetryBtn').style.display = 'none';
+    document.getElementById('swSpinBtn').style.display = 'none';
+    var copyBtn = document.getElementById('swCopyBtn');
+    if (copyBtn) { copyBtn.textContent = '📋 Copy'; copyBtn.classList.remove('copied'); }
+    var infoBtn = document.getElementById('swInfoBtn');
+    if (infoBtn) infoBtn.style.display = 'flex';
+    if (remainTurns <= 0) {
+      var sp = document.getElementById('swSharePanelEl');
+      if (sp && sp.style.display === 'none') {
+        sp.style.display = '';
+        sp.style.animation = 'none';
+        sp.offsetHeight;
+        sp.style.animation = 'sw-popin .45s cubic-bezier(.34,1.56,.64,1)';
+      }
+    }
+    if (seg.type === 'lose') {
+      icon.textContent = '😢'; tit.textContent = 'Mất Lượt!'; tit.style.color = '#FF7777';
+      desc.textContent = remainTurns > 0 ? 'Tiếc quá! Còn ' + remainTurns + ' lượt — thử lại ngay!' : 'Hết lượt hôm nay. Chia sẻ bên cạnh để lấy thêm lượt!';
+      if (remainTurns > 0) document.getElementById('swRetryBtn').style.display = 'block';
+    } else if (seg.type === 'extra') {
+      var nt = addExtraTurns(3); updateDots(Math.min(nt, 3));
+      icon.textContent = '🎁'; tit.textContent = '+3 Lượt Quay!'; tit.style.color = '#F5C842';
+      desc.textContent = 'Tuyệt vời! Bạn được thêm 3 lượt — đang có ' + nt + ' lượt!';
+      document.getElementById('swSpinBtn').disabled = false;
+    } else if (seg.type === 'ea_trial') {
+      icon.textContent = '🚀';
+      tit.textContent  = 'EA TIMING 3 Tháng!';
+      tit.style.color  = '#FFD700';
+      desc.textContent = 'Cực hiếm! Bạn vừa trúng EA giao dịch tự động — tải ngay bên dưới.';
+      document.getElementById('swEaLink1').href = EA_LINKS.ea;
+      document.getElementById('swEaLink2').href = EA_LINKS.setup;
+      document.getElementById('swEaBox').style.display = 'block';
+      if (remainTurns > 0) document.getElementById('swSpinBtn').disabled = false;
+    } else {
+      icon.textContent = '🎉';
+      tit.textContent  = 'GIẢM ' + seg.val + '%! 🔥';
+      tit.style.color  = '#F5C842';
+      desc.textContent = 'Bạn vừa mở ra ô bí ẩn. Chọn bên dưới:';
+      document.getElementById('swCodeText').textContent = seg.code;
+      skipBtn.textContent = remainTurns > 0 ? '🎡 Quay Tiếp (' + remainTurns + ')' : '✕ Bỏ Qua';
+      choices.style.display = 'grid';
+    }
+  }
+
+  window.swRevealCode = function() {
+    var seg = _lastSeg;
+    if (!seg) return;
+    document.getElementById('swChoices').style.display = 'none';
+    saveWonDiscount(seg.code, seg.val);
+    var reveal  = document.getElementById('swCodeReveal');
+    var btnUse  = document.getElementById('swBtnUse');
+    var sep     = pendingUrl.includes('?') ? '&' : '?';
+    btnUse.textContent = '✅ Đăng Ký Với Giảm ' + seg.val + '%';
+    btnUse.href = pendingUrl + sep + 'discount=' + seg.val + '&code=' + seg.code;
+    reveal.style.display = 'block';
+  };
+
+  var CHECKOUT_URL = 'https://whop.com/checkout/plan_sV7z8vuwsdE38';
+
+  window.swCopyCode = function() {
+    var code = document.getElementById('swCodeText').textContent;
+    var btn  = document.getElementById('swCopyBtn');
+    var redirect = function() {
+      btn.textContent = '✅ Đã copy!'; btn.classList.add('copied');
+      setTimeout(function() { window.open(CHECKOUT_URL, '_blank'); }, 400);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(redirect).catch(redirect);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = code; ta.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta); redirect();
+    }
+  };
+
+  window.swKeepSpinning = function() {
+    document.getElementById('swResult').classList.remove('show');
+    var turns = getTurns();
+    var btn = document.getElementById('swSpinBtn');
+    btn.style.display = '';
+    btn.disabled = (turns <= 0);
+    btn.textContent = turns > 0 ? '🎯 QUAY TIẾP' : 'Hết lượt hôm nay';
+  };
+
+  window.swRetry = function() {
+    document.getElementById('swResult').classList.remove('show');
+    var btn = document.getElementById('swSpinBtn');
+    btn.style.display = '';
+    btn.disabled = false;
+    btn.textContent = '🎯 QUAY TIẾP';
+  };
+
+  window.swOpen = function(url) {
+    pendingUrl = url || 'checkout.html';
+    var turns  = getTurns(); updateDots(Math.min(turns, 3));
+    updateShareBtns();
+    var sp = document.getElementById('swSharePanelEl');
+    var ib = document.getElementById('swInfoBtn');
+    if (turns > 0) {
+      if (sp) sp.style.display = 'none';
+      if (ib) ib.style.display = 'none';
+    } else {
+      if (sp) sp.style.display = '';
+      if (ib) ib.style.display = 'none';
+    }
+    var pp = document.getElementById('swPrizePanel');
+    if (pp) pp.classList.remove('show');
+    _lastSeg = null;
+    _wonSegIdx = -1;
+    var btn = document.getElementById('swSpinBtn');
+    btn.style.display = '';
+    btn.disabled = (turns <= 0);
+    btn.textContent = turns > 0 ? '🎯 QUAY NGAY' : 'Hết lượt hôm nay';
+    document.getElementById('swResult').classList.remove('show');
+    document.getElementById('swOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    var canvas = document.getElementById('swCanvas');
+    canvas.style.transition = 'none';
+    canvas.style.transform  = 'rotate(0deg)';
+    currentRot = 0; isSpinning = false;
+    drawWheel();
+    if (turns <= 0) {
+      var saved = getSavedDiscount();
+      if (saved) {
+        _lastSeg = { type: 'discount', code: saved.code, val: saved.val };
+        var icon   = document.getElementById('swResIcon');
+        var tit    = document.getElementById('swResTitle');
+        var desc   = document.getElementById('swResDesc');
+        var choices= document.getElementById('swChoices');
+        var reveal = document.getElementById('swCodeReveal');
+        var btnUse = document.getElementById('swBtnUse');
+        icon.textContent = '🎉'; icon.style.display = 'block';
+        tit.textContent  = 'GIẢM ' + saved.val + '%! 🔥';
+        tit.style.color  = '#F5C842';
+        desc.textContent = 'Mã giảm giá hôm nay của bạn:';
+        choices.style.display = 'none';
+        document.getElementById('swCodeText').textContent = saved.code;
+        var sep = pendingUrl.indexOf('?') >= 0 ? '&' : '?';
+        btnUse.textContent = '✅ Đăng Ký Với Giảm ' + saved.val + '%';
+        btnUse.href = pendingUrl + sep + 'discount=' + saved.val + '&code=' + saved.code;
+        reveal.style.display = 'block';
+        document.getElementById('swResult').classList.add('show');
+        if (ib) ib.style.display = 'flex';
+      }
+    }
+  };
+
+  window.swClose = function() {
+    document.getElementById('swOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  function getShareLog() {
+    try { return JSON.parse(localStorage.getItem('swShareLog') || '{}'); } catch(e) { return {}; }
+  }
+  function setShareLog(d) {
+    try { localStorage.setItem('swShareLog', JSON.stringify(d)); } catch(e) {}
+  }
+  function updateShareBtns() {
+    var log   = getShareLog();
+    var today = new Date().toDateString();
+    ['facebook','messenger','zalo'].forEach(function(p) {
+      var btn = document.getElementById('swShareBtn_' + p);
+      var st  = document.getElementById('swShareSt_' + p);
+      var done = log[p] === today;
+      if (btn) btn.classList.toggle('done', done);
+      if (st)  st.textContent = done ? '✓' : '+1';
+    });
+  }
+  function showShareToast(msg) {
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1A8C4E,#27C76A);color:#fff;padding:11px 22px;border-radius:30px;font-weight:700;font-size:.82rem;z-index:99999;box-shadow:0 4px 20px rgba(39,199,106,.55);white-space:nowrap;animation:sw-popin .3s ease;';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(function(){t.remove();},400); }, 2400);
+  }
+
+  var TIERS = [
+    { icon:'💀', name:'Mất Lượt',        stars:'',      tier:'tier-lose',  chip:'chip-common',  chipLabel:'Rủi ro',      types:['lose']      },
+    { icon:'🎁', name:'Thêm Lượt Quay',  stars:'',      tier:'tier-extra', chip:'chip-medium',  chipLabel:'Bonus',       types:['extra']     },
+    { icon:'🔵', name:'Ưu Đãi Bí Ẩn',   stars:'★',     tier:'tier-low',   chip:'chip-common',  chipLabel:'Cấp 1',       vals:[5,8]          },
+    { icon:'🟡', name:'Ưu Đãi Bí Ẩn',   stars:'★★',    tier:'tier-mid',   chip:'chip-medium',  chipLabel:'Cấp 2',       vals:[10,12]        },
+    { icon:'🟠', name:'Ưu Đãi Bí Ẩn',   stars:'★★★',   tier:'tier-mid',   chip:'chip-medium',  chipLabel:'Cấp 3',       vals:[15,18]        },
+    { icon:'🔴', name:'Ưu Đãi Bí Ẩn',   stars:'★★★★',  tier:'tier-high',  chip:'chip-rare',    chipLabel:'Cấp 4',       vals:[20,25]        },
+    { icon:'💎', name:'Ưu Đãi Bí Ẩn',   stars:'★★★★★', tier:'tier-high',  chip:'chip-rare',    chipLabel:'Cấp 5 Hiếm', vals:[30]           },
+    { icon:'🤖', name:'Phần Thưởng ???', stars:'✦✦✦',   tier:'tier-rare',  chip:'chip-jackpot', chipLabel:'JACKPOT',     types:['ea_trial']  },
+  ];
+
+  function buildPrizeRows() {
+    var wonIdx = -1;
+    if (_lastSeg) {
+      TIERS.forEach(function(t, i) {
+        if (t.types && t.types.indexOf(_lastSeg.type) >= 0) wonIdx = i;
+        if (t.vals  && t.vals.indexOf(_lastSeg.val)  >= 0) wonIdx = i;
+      });
+    }
+    var wonName = '';
+    if (_lastSeg) {
+      if      (_lastSeg.type === 'lose')     wonName = 'Mất Lượt';
+      else if (_lastSeg.type === 'extra')    wonName = '+3 Lượt Quay';
+      else if (_lastSeg.type === 'discount') wonName = 'Giảm ' + _lastSeg.val + '%';
+      else if (_lastSeg.type === 'ea_trial') wonName = 'EA TIMING 3 Tháng';
+    }
+    var html = '';
+    TIERS.forEach(function(t, i) {
+      var isWon    = wonIdx === i;
+      var dispName = isWon && wonName ? wonName : t.name;
+      var dispStar = isWon ? '' : t.stars;
+      html += '<div class="sw-prize-row ' + t.tier + (isWon ? ' is-won' : '') + '">'
+            + '<span class="sw-prize-icon">' + t.icon + '</span>'
+            + '<span class="sw-prize-name">' + dispName
+            +   (dispStar ? '<span class="sw-prize-stars">' + dispStar + '</span>' : '')
+            +   (isWon    ? '<span class="sw-prize-you">← bạn</span>' : '')
+            + '</span>'
+            + '<span class="sw-prize-chip ' + t.chip + '">' + t.chipLabel + '</span>'
+            + '</div>';
+    });
+    return html;
+  }
+
+  window.swTogglePrize = function() {
+    var panel = document.getElementById('swPrizePanel');
+    if (panel.classList.contains('show')) { panel.classList.remove('show'); return; }
+    panel.innerHTML = '<div class="sw-prize-hdr">'
+      + '<span class="sw-prize-hdr-title">🏆 Bảng Giải Thưởng</span>'
+      + '<button class="sw-prize-close" onclick="swTogglePrize()">✕</button>'
+      + '</div>'
+      + buildPrizeRows()
+      + '<div class="sw-prize-note">Cấp càng cao → ưu đãi càng lớn<br>Ô <span style="color:#F5C842;">← bạn</span> là cấp bạn vừa quay được</div>';
+    panel.classList.add('show');
+  };
+
+  window.swShare = function(platform) {
+    var log   = getShareLog();
+    var today = new Date().toDateString();
+    if (log[platform] === today) return;
+    var SHARE_LINK = 'https://vanthanhgt.netlify.app/';
+    var shareText = 'Khóa học SNR Master — chiến lược Supply Demand thực chiến cùng Văn Thành GT 🔥 Đang có ưu đãi đặc biệt!';
+    var url  = encodeURIComponent(SHARE_LINK);
+    var btn = document.getElementById('swShareBtn_' + platform);
+    if (btn) { btn.style.opacity = '.6'; btn.style.pointerEvents = 'none'; }
+    if (platform === 'facebook') {
+      window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank', 'width=640,height=480,noopener');
+    } else if (platform === 'messenger') {
+      window.open('fb-messenger://share/?link=' + url, '_self');
+    } else if (platform === 'zalo') {
+      if (navigator.share) {
+        navigator.share({ title: 'Khóa học SNR Master', text: shareText, url: SHARE_LINK }).catch(function() {});
+      } else {
+        var copyFn = navigator.clipboard
+          ? navigator.clipboard.writeText(SHARE_LINK)
+          : Promise.resolve(document.execCommand ? (function(){
+              var ta=document.createElement('textarea'); ta.value=SHARE_LINK;
+              document.body.appendChild(ta); ta.select();
+              document.execCommand('copy'); document.body.removeChild(ta);
+            })() : null);
+        Promise.resolve(copyFn).then(function() {
+          showShareToast('Đã copy link! Mở Zalo → dán vào để chia sẻ 📲');
+        });
+      }
+    }
+    setTimeout(function() {
+      log[platform] = today;
+      setShareLog(log);
+      var nt = addExtraTurns(1);
+      updateDots(Math.min(nt, 3));
+      updateShareBtns();
+      showShareToast('+1 lượt! Bạn có ' + nt + ' lượt hôm nay 🎉');
+      var spinBtn = document.getElementById('swSpinBtn');
+      if (spinBtn) { spinBtn.disabled = false; spinBtn.textContent = '🎯 QUAY NGAY'; }
+    }, 4000);
+  };
+
+  document.getElementById('swOverlay').addEventListener('click', function(e) { if (e.target === this) swClose(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') swClose(); });
+
+  (function() {
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    function tick() {
+      var el = document.getElementById('swResetTimer');
+      if (!el) return;
+      var now = new Date();
+      var midnight = new Date(now); midnight.setHours(24, 0, 0, 0);
+      var diff = Math.max(0, Math.floor((midnight - now) / 1000));
+      var h = Math.floor(diff / 3600);
+      var m = Math.floor((diff % 3600) / 60);
+      var s = diff % 60;
+      el.textContent = '🕐 ' + pad(h) + ':' + pad(m) + ':' + pad(s);
+      el.classList.toggle('urgent', h < 1);
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+})();
+/* ── END SPIN WHEEL ── */
+
+/* ---- STEPS SLIDER ---- */
+(function(){
+  var cur = 0, total = 9;
+  var track = document.getElementById('stepsTrack');
+  var outer = document.querySelector('.steps-track-outer');
+  var dotsWrap = document.getElementById('stepsDots');
+  var counter = document.getElementById('stepsCounter');
+  var prevBtn = document.getElementById('stepsPrev');
+  var nextBtn = document.getElementById('stepsNext');
+  var startX = 0, isDrag = false;
+
+  function syncHeight(){
+    var slides = track.children;
+    if(slides[cur]) outer.style.height = slides[cur].offsetHeight + 'px';
+  }
+
+  // build dots
+  for(var i=0;i<total;i++){
+    var d = document.createElement('span');
+    d.className = 'step-dot' + (i===0?' active':'');
+    d.setAttribute('data-i', i);
+    d.onclick = function(){ stepsGoTo(+this.getAttribute('data-i')); };
+    dotsWrap.appendChild(d);
+  }
+
+  function stepsGoTo(n){
+    cur = Math.max(0, Math.min(total-1, n));
+    track.style.transform = 'translateX(-'+cur+'00%)';
+    syncHeight();
+    counter.textContent = (cur+1)+' / '+total;
+    prevBtn.disabled = cur===0;
+    nextBtn.disabled = cur===total-1;
+    dotsWrap.querySelectorAll('.step-dot').forEach(function(d,i){
+      d.classList.toggle('active', i===cur);
+    });
+  }
+
+  window.stepsGo = function(dir){ stepsGoTo(cur+dir); };
+
+  // set height on load (wait for images)
+  window.addEventListener('load', syncHeight);
+  // also run immediately in case already loaded
+  syncHeight();
+
+  // touch/mouse swipe
+  outer.addEventListener('touchstart',function(e){ startX=e.touches[0].clientX; },{ passive:true });
+  outer.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX - startX;
+    if(Math.abs(dx)>40) stepsGo(dx<0?1:-1);
+  },{ passive:true });
+  outer.addEventListener('mousedown',function(e){ startX=e.clientX; isDrag=true; });
+  outer.addEventListener('mouseup',function(e){
+    if(!isDrag) return; isDrag=false;
+    var dx=e.clientX-startX;
+    if(Math.abs(dx)>40) stepsGo(dx<0?1:-1);
+  });
+})();
+/* ---- END STEPS SLIDER ---- */
+
+function openLb(img) {
+  document.getElementById('lb-img').src = img.src;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-
-function showPaymentPanel(data) {
-  document.getElementById('panelInfo').classList.add('hidden');
-  document.getElementById('panelPayment').classList.remove('hidden');
-  document.getElementById('stepA').className = 'step done';
-  document.getElementById('stepB').className = 'step active';
-
-  document.getElementById('qrImage').src     = data.qr_url;
-  document.getElementById('bankName').textContent   = data.bank_name;
-  document.getElementById('bankAcc').textContent    = data.account_number;
-  document.getElementById('bankOwner').textContent  = data.account_name;
-  document.getElementById('bankAmount').textContent = displayAmount;
-  document.getElementById('refCode').textContent    = data.ref_code;
-  document.getElementById('refWarn').textContent    = data.ref_code;
-  window._refCode = data.ref_code;
+function closeLb() {
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
 }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
 
-function showActivation() {
-  document.getElementById('panelPayment').classList.add('hidden');
-  document.getElementById('panelActivation').classList.remove('hidden');
-  document.getElementById('stepB').className = 'step done';
-  document.getElementById('stepC').className = 'step active';
-  if (window._refCode) document.getElementById('refInGuide').textContent = window._refCode;
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('panel-' + tab).classList.add('active');
+  var tabs = document.querySelectorAll('.tab');
+  if (tab === 'visa') tabs[0].classList.add('active');
+  else tabs[1].classList.add('active');
 }
 
 function copyText(elId) {
-  const text = document.getElementById(elId).textContent.trim();
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector(`[onclick="copyText('${elId}')"]`);
-    const orig = btn.textContent;
-    btn.textContent = 'Đã copy!';
-    setTimeout(() => btn.textContent = orig, 1500);
+  var text = document.getElementById(elId).textContent.trim();
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.querySelector('[onclick="copyText(\'' + elId + '\')"]');
+    var orig = btn.textContent;
+    btn.textContent = '✓ Đã copy!';
+    setTimeout(function() { btn.textContent = orig; }, 1500);
   });
 }
+
+// Đọc plan từ URL để điều chỉnh giá (nếu index.html truyền qua ?plan=...)
+var _bankBaseRaw = 7898000;
+(function() {
+  var PLANS = {
+    full:     { amount: '7.898.000đ', raw: 7898000 },
+    lifetime: { amount: '7.898.000đ', raw: 7898000 },
+    year:     { amount: '7.898.000đ', raw: 7898000 },
+    starter:  { amount: '2.490.000đ', raw: 2490000 },
+    oto1:     { amount: '5.500.000đ', raw: 5500000 },
+    nen500k:  { amount: '500.000đ',   raw: 500000  },
+  };
+  var params = new URLSearchParams(window.location.search);
+  var key = params.get('plan') || 'full';
+  var p = PLANS[key] || PLANS.full;
+  _bankBaseRaw = p.raw;
+
+  document.getElementById('visaAmount').textContent        = p.amount;
+  document.getElementById('bankAmountDisplay').textContent = p.amount;
+  document.getElementById('bankAmountRow').textContent     = p.amount;
+
+  var qr = 'https://qr.sepay.vn/img?acc=5310986313&bank=BIDV&amount=' + p.raw + '&des=VANTIX&template=compact&download=false';
+  document.getElementById('bankQrImg').src = qr;
+})();
+
+var COUPON_CODES = {
+  'XAU-LUCKY':5,'SNR-08':8,'SUPPLY10':10,'ACTION12':12,
+  'BULL-VX':18,'PUMP-VX':20,'MOON-25':25,'DIAMOND30':30
+};
+
+function updateBankAmount(raw, formatted) {
+  document.getElementById('bankAmountDisplay').textContent = formatted;
+  document.getElementById('bankAmountRow').textContent     = formatted;
+  document.getElementById('bankQrImg').src =
+    'https://qr.sepay.vn/img?acc=5310986313&bank=BIDV&amount=' + raw + '&des=VANTIX&template=compact&download=false';
+}
+
+function applyBankCoupon() {
+  var code = document.getElementById('bankCoupon').value.trim().toUpperCase();
+  var msg  = document.getElementById('bankCouponMsg');
+  if (!code) { msg.className = 'coupon-msg'; msg.textContent = ''; return; }
+  var pct = COUPON_CODES[code];
+  if (!pct) {
+    msg.className = 'coupon-msg error';
+    msg.textContent = '❌ Mã không hợp lệ';
+    updateBankAmount(_bankBaseRaw, formatVND(_bankBaseRaw));
+    return;
+  }
+  var discounted = Math.round(_bankBaseRaw * (1 - pct / 100));
+  var saved = _bankBaseRaw - discounted;
+  msg.className = 'coupon-msg success';
+  msg.textContent = '✅ Giảm ' + pct + '% — tiết kiệm ' + formatVND(saved);
+  updateBankAmount(discounted, formatVND(discounted));
+}
+
+function formatVND(n) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + 'đ';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('bankCoupon');
+  if (inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') applyBankCoupon(); });
+});
 </script>
 </body>
 </html>
